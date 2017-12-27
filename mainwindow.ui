@@ -28,17 +28,17 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0" colspan="6">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <widget class="QToolButton" name="toolButton_2">
       <property name="text">
        <string>Undo</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QToolButton" name="toolButton_3">
-      <property name="text">
-       <string>Redo</string>
       </property>
      </widget>
     </item>
@@ -49,10 +49,10 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="5">
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="0" column="2">
+     <widget class="QToolButton" name="toolButton_3">
+      <property name="text">
+       <string>Redo</string>
       </property>
      </widget>
     </item>
@@ -70,39 +70,19 @@
         <height>0</height>
        </size>
       </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Tab 2</string>
-       </attribute>
-      </widget>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
      </widget>
     </item>
-    <item row="2" column="4">
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="2" column="4" colspan="2">
+     <widget class="DragWidget" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>717</width>
-         <height>533</height>
-        </rect>
-       </property>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -120,6 +100,14 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>DragWidget</class>
+   <extends>QFrame</extends>
+   <header>dragwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
