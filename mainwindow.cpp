@@ -6,9 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
-    ui->tabWidget->addTab(new DragWidget(false), "First tab");
+    ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::Menu), "First tab");
 }
 
 MainWindow::~MainWindow()
