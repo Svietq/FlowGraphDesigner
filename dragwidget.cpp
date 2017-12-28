@@ -12,6 +12,33 @@ namespace
         node->show();
         node->setAttribute(Qt::WA_DeleteOnClose);
     }
+
+    Node* create_node(QWidget *parent, const QPoint & pos, const QPixmap & pixmap, std::size_t id)
+    {
+        Node *newNode = new Node(parent, id);
+        newNode->setPixmap(pixmap);
+        newNode->move(pos);
+        newNode->show();
+        newNode->setAttribute(Qt::WA_DeleteOnClose);
+
+        return newNode;
+    }
+
+    QDataStream & operator<<( QDataStream & data, const Node & node)
+    {
+        data << node.id << *node.pixmap();
+
+        return data;
+    }
+
+    QDataStream & operator>>( QDataStream & data, Node & node)
+    {
+        QPixmap pixmap;
+        data >> node.id >> pixmap;
+        node.setPixmap(pixmap);
+
+        return data;
+    }
 }
 
 DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype}
@@ -61,17 +88,17 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
-    current_block = static_cast<Node*>(childAt(event->pos()));
-    if (!current_block)
+    current_node = static_cast<Node*>(childAt(event->pos()));
+    if (!current_node)
     {
         return;
     }
 
-    QPixmap pixmap = *current_block->pixmap();
+    QPixmap pixmap = *current_node->pixmap();
 
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    dataStream << pixmap << QPoint(event->pos() - current_block->pos());
+    dataStream << *current_node << QPoint(event->pos() - current_node->pos());
 
     QMimeData *mimeData = new QMimeData;
     mimeData->setData(mime_format, itemData);
@@ -79,13 +106,13 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
     drag->setPixmap(pixmap);
-    drag->setHotSpot(event->pos() - current_block->pos());
+    drag->setHotSpot(event->pos() - current_node->pos());
 
-    if(current_block)
+    if(current_node)
     {
         if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
         {
-            current_block->close();
+            current_node->close();
         }
     }
 }
@@ -97,33 +124,41 @@ void DragWidget::dropEvent(QDropEvent *event)
         QByteArray itemData = event->mimeData()->data(mime_format);
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
-        QPixmap pixmap;
         QPoint offset;
-        dataStream >> pixmap >> offset;
+        Node new_node{this};
+        dataStream >> new_node >> offset;
 
-        if( !( (static_cast<DragWidget*>(event->source())->type == Type::Canvas) && (event->source() != this) ))
+        if(static_cast<DragWidget*>(event->source())->type == Type::Menu)
         {
-            Node *newNode = new Node(this);
-            newNode->setPixmap(pixmap);
-            newNode->move(event->pos() - offset);
-            newNode->show();
-            newNode->setAttribute(Qt::WA_DeleteOnClose);
+            if( event->source() != this ) //Menu -> Canvas
+            {
+                auto node = create_node(this, event->pos() - offset, *new_node.pixmap(), node_list.size());
+                node_list.push_back(node);
+                event->setDropAction(Qt::CopyAction);
+            }
+            else                          //Menu -> Menu
+            {
+                event->ignore();
+                return;
+            }
         }
-        else
+        else if(static_cast<DragWidget*>(event->source())->type == Type::Canvas)
         {
-            auto obj = static_cast<DragWidget*>(event->source())->current_block;
-            delete obj;
+            if( event->source() != this ) //Canvas -> Menu
+            {
+                auto obj = static_cast<DragWidget*>(event->source())->current_node;
+                auto it = std::find(node_list.begin(), node_list.end(), obj);
+                if (it != node_list.end()) { node_list.erase(it); }
+                delete obj;
+            }
+            else                          //Canvas -> Canvas
+            {
+                create_node(this, event->pos() - offset, *new_node.pixmap(), new_node.id);
+                event->setDropAction(Qt::MoveAction);
+            }
         }
 
-        if (event->source() == this)
-        {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
-        }
-        else
-        {
-            event->acceptProposedAction();
-        }
+        event->accept();
     }
     else
     {
@@ -131,7 +166,7 @@ void DragWidget::dropEvent(QDropEvent *event)
     }
 }
 
-void DragWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void DragWidget::mouseDoubleClickEvent(QMouseEvent *)
 {
     emit close_dock_widget();
 }

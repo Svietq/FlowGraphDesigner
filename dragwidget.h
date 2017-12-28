@@ -17,7 +17,9 @@ class DragWidget : public QFrame
 public:
     enum class Type { Menu, Canvas } type;
     explicit DragWidget(QWidget *parent = nullptr, Type itype = Type::Canvas);
-    Node * current_block = nullptr;
+    Node * current_node = nullptr;
+    std::vector<Node*> node_list;
+    std::size_t no_of_nodes;
 
 protected:
     const QString mime_format = "application/x-dnditemdata";
@@ -25,7 +27,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void dropEvent(QDropEvent *event) override;
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
 
 signals:
     void close_dock_widget();

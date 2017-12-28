@@ -10,11 +10,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::Menu), "First tab");
     ui->dockWidget_2->hide();
     QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ui->dockWidget_2->hide();} );
+//    set_node_id(5);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::set_node_id(std::size_t id)
+{
+    static_cast<QLabel*>(ui->dockWidgetContents_2->children()[0])->setText(QString::number(id));
 }
 
 void MainWindow::show_window()

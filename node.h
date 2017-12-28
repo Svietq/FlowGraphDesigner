@@ -7,11 +7,14 @@ class Node : public QLabel
 {
     Q_OBJECT
 public:
-    explicit Node(QWidget *parent = nullptr);
-    explicit Node(QWidget *parent, bool menu) :  QLabel{parent} {}
+    explicit Node(QWidget *parent = nullptr, size_t n=0);
+    explicit Node(QWidget *parent, bool) :  QLabel{parent} {}
+    ~Node();
+
+    unsigned int id=0;
 
 protected:
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent*) override;
 
 signals:
     void node_clicked();

@@ -15,6 +15,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void set_node_id(std::size_t id);
+
 private:
     Ui::MainWindow *ui;
 
