@@ -9,8 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::Menu), "First tab");
     ui->dockWidget_2->hide();
-//    QObject::connect( ui->canvas->current_block, &Node::node_clicked, [=](){ ui->dockWidget->show(); });
-
+    QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ui->dockWidget_2->hide();} );
 }
 
 MainWindow::~MainWindow()

@@ -90,11 +90,6 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void DragWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    emit QFrame::customContextMenuRequested(event->pos());
-}
-
 void DragWidget::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasFormat(mime_format))
@@ -134,5 +129,10 @@ void DragWidget::dropEvent(QDropEvent *event)
     {
         event->ignore();
     }
+}
+
+void DragWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit close_dock_widget();
 }
 

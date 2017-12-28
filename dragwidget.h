@@ -12,6 +12,7 @@ QT_END_NAMESPACE
 
 class DragWidget : public QFrame
 {
+    Q_OBJECT
 
 public:
     enum class Type { Menu, Canvas } type;
@@ -23,11 +24,11 @@ protected:
 
     void dragEnterEvent(QDragEnterEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 signals:
-    void node_pressed();
+    void close_dock_widget();
 
 };
 
