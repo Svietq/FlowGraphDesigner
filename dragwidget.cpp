@@ -1,16 +1,16 @@
 #include "dragwidget.h"
-#include <QLabel>
+
 #include <QtWidgets>
 
 namespace
 {
     void set_node_icons(QWidget *parent)
     {
-        QLabel *node_icon = new QLabel(parent);
-        node_icon->setPixmap(QPixmap(":/icons/node.png"));
-        node_icon->move(10, 10);
-        node_icon->show();
-        node_icon->setAttribute(Qt::WA_DeleteOnClose);
+        Node *node = new Node(parent, true);
+        node->setPixmap(QPixmap(":/icons/node.png"));
+        node->move(10, 10);
+        node->show();
+        node->setAttribute(Qt::WA_DeleteOnClose);
     }
 }
 
@@ -35,7 +35,7 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
                 event->setDropAction(Qt::CopyAction);
                 event->accept();
             }
-            else                         //Menu -> Menu
+            else                          //Menu -> Menu
             {
                 event->ignore();
             }
@@ -61,7 +61,7 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
-    current_block = static_cast<QLabel*>(childAt(event->pos()));
+    current_block = static_cast<Node*>(childAt(event->pos()));
     if (!current_block)
     {
         return;
@@ -90,6 +90,11 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
+void DragWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    emit QFrame::customContextMenuRequested(event->pos());
+}
+
 void DragWidget::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasFormat(mime_format))
@@ -103,11 +108,11 @@ void DragWidget::dropEvent(QDropEvent *event)
 
         if( !( (static_cast<DragWidget*>(event->source())->type == Type::Canvas) && (event->source() != this) ))
         {
-            QLabel *newIcon = new QLabel(this);
-            newIcon->setPixmap(pixmap);
-            newIcon->move(event->pos() - offset);
-            newIcon->show();
-            newIcon->setAttribute(Qt::WA_DeleteOnClose);
+            Node *newNode = new Node(this);
+            newNode->setPixmap(pixmap);
+            newNode->move(event->pos() - offset);
+            newNode->show();
+            newNode->setAttribute(Qt::WA_DeleteOnClose);
         }
         else
         {
@@ -130,5 +135,4 @@ void DragWidget::dropEvent(QDropEvent *event)
         event->ignore();
     }
 }
-
 

@@ -14,9 +14,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void foo(){setWindowTitle("dziala");}
 
 private:
     Ui::MainWindow *ui;
+
+public slots:
+    void show_window();
 };
 
 #endif // MAINWINDOW_H

@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    dragwidget.cpp
+    dragwidget.cpp \
+    node.cpp
 
 HEADERS += \
         mainwindow.h \
-    dragwidget.h
+    dragwidget.h \
+    node.h
 
 FORMS += \
         mainwindow.ui
