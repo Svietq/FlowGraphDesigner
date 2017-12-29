@@ -19,7 +19,7 @@ public:
     enum class Type { Menu, Canvas } type;
     explicit DragWidget(QWidget *parent = nullptr, Type itype = Type::Canvas);
     Node * current_node = nullptr;
-    std::vector<Node*> node_list;
+    QVector<Node*> node_list;
     std::size_t no_of_nodes;
 
 protected:
@@ -38,6 +38,8 @@ protected:
     QPoint line_end{};
     bool is_drawing = false;
     bool is_connecting = false;
+    QLine current_line;
+    QVector<QLine> lines;
 
 public slots:
     void start_connecting();

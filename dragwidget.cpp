@@ -194,6 +194,13 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
         if(node && (node != current_node))
         {
             line_end = node->point_in;
+            if( current_node )
+            {
+                current_node->nodes_out.push_back(node);
+                node->nodes_in.push_back(current_node);
+                QLine line{current_node->point_out, node->point_in};
+                lines.push_back(line);
+            }
         }
         else
         {
@@ -211,7 +218,11 @@ void DragWidget::paintEvent(QPaintEvent *event)
     {
         painter.begin(this);
         painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
-        painter.drawLine(line_begin, line_end);
+        current_line = QLine{line_begin, line_end};
+        painter.drawLine(current_line);
+
+        painter.drawLines(lines);
+
         painter.end();
     }
 }

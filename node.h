@@ -15,6 +15,9 @@ public:
     QPoint point_in;
     QPoint point_out;
 
+    QVector<Node*> nodes_in;
+    QVector<Node*> nodes_out;
+
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
 
