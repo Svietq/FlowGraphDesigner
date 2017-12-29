@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QFrame>
+#include <QPainter>
 #include "node.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,8 +33,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
-    QPoint line_begin;
-    QPoint line_end;
+    QPainter painter;
+    QPoint line_begin{};
+    QPoint line_end{};
     bool is_drawing = false;
     bool is_connecting = false;
 

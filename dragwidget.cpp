@@ -6,8 +6,7 @@ namespace
 {
     void set_node_icons(QWidget *parent)
     {
-        Node *node = new Node(parent, true);
-        node->setPixmap(QPixmap(":/icons/node.png"));
+        Node *node = new Node(parent, QPixmap(":/icons/node.png"), true);
         node->move(10, 10);
         node->show();
         node->setAttribute(Qt::WA_DeleteOnClose);
@@ -15,9 +14,7 @@ namespace
 
     Node* create_node(QWidget *parent, const QPoint & pos, const QPixmap & pixmap, std::size_t id)
     {
-        Node *newNode = new Node(parent, id);
-        newNode->setPixmap(pixmap);
-        newNode->move(pos);
+        Node *newNode = new Node(parent, pixmap, pos, id);
         newNode->show();
         newNode->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -96,13 +93,11 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
 
     if(is_connecting)
     {
-//        window()->setWindowTitle("connecting");
-        line_begin = event->pos();
+        line_begin = current_node->point_out;
         is_drawing = true;
     }
     else
     {
-        window()->setWindowTitle("moving");
         //node moving
         QPixmap pixmap = *current_node->pixmap();
 
@@ -180,9 +175,6 @@ void DragWidget::dropEvent(QDropEvent *event)
 void DragWidget::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit close_dock_widget();
-    //line drawing
-//    line_begin = event->pos();
-//    is_drawing = true;
 }
 
 void DragWidget::mouseMoveEvent(QMouseEvent *event)
@@ -198,7 +190,15 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     if(is_connecting)
     {
-        line_end = event->pos();
+        auto node = static_cast<Node*>(childAt(event->pos()));
+        if(node && (node != current_node))
+        {
+            line_end = node->point_in;
+        }
+        else
+        {
+            line_end = event->pos();
+        }
         is_drawing = false;
         this->repaint();
     }
@@ -206,11 +206,9 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void DragWidget::paintEvent(QPaintEvent *event)
 {
-    window()->setWindowTitle("painting");
-    if(true)
+//    window()->setWindowTitle("painting");
+    if(is_connecting)
     {
-        window()->setWindowTitle("drawing");
-        QPainter painter;
         painter.begin(this);
         painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
         painter.drawLine(line_begin, line_end);
