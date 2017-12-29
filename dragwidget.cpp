@@ -94,25 +94,36 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    QPixmap pixmap = *current_node->pixmap();
-
-    QByteArray itemData;
-    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    dataStream << *current_node << QPoint(event->pos() - current_node->pos());
-
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData(mime_format, itemData);
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    drag->setPixmap(pixmap);
-    drag->setHotSpot(event->pos() - current_node->pos());
-
-    if(current_node)
+    if(is_connecting)
     {
-        if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
+//        window()->setWindowTitle("connecting");
+        line_begin = event->pos();
+        is_drawing = true;
+    }
+    else
+    {
+        window()->setWindowTitle("moving");
+        //node moving
+        QPixmap pixmap = *current_node->pixmap();
+
+        QByteArray itemData;
+        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+        dataStream << *current_node << QPoint(event->pos() - current_node->pos());
+
+        QMimeData *mimeData = new QMimeData;
+        mimeData->setData(mime_format, itemData);
+
+        QDrag *drag = new QDrag(this);
+        drag->setMimeData(mimeData);
+        drag->setPixmap(pixmap);
+        drag->setHotSpot(event->pos() - current_node->pos());
+
+        if(current_node)
         {
-            current_node->close();
+            if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
+            {
+                current_node->close();
+            }
         }
     }
 }
@@ -166,8 +177,54 @@ void DragWidget::dropEvent(QDropEvent *event)
     }
 }
 
-void DragWidget::mouseDoubleClickEvent(QMouseEvent *)
+void DragWidget::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit close_dock_widget();
+    //line drawing
+//    line_begin = event->pos();
+//    is_drawing = true;
+}
+
+void DragWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if(is_connecting)
+    {
+        line_end = event->pos();
+        this->repaint();
+    }
+}
+
+void DragWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(is_connecting)
+    {
+        line_end = event->pos();
+        is_drawing = false;
+        this->repaint();
+    }
+}
+
+void DragWidget::paintEvent(QPaintEvent *event)
+{
+    window()->setWindowTitle("painting");
+    if(true)
+    {
+        window()->setWindowTitle("drawing");
+        QPainter painter;
+        painter.begin(this);
+        painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
+        painter.drawLine(line_begin, line_end);
+        painter.end();
+    }
+}
+
+void DragWidget::start_connecting()
+{
+    is_connecting = true;
+}
+
+void DragWidget::stop_connecting()
+{
+    is_connecting = false;
 }
 

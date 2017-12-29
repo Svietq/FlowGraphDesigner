@@ -22,6 +22,13 @@ private:
 
 public slots:
     void show_window();
+
+signals:
+    void connect_button_toggled();
+    void connect_button_not_toggled();
+
+private slots:
+    void on_toolButton_4_toggled(bool checked);
 };
 
 #endif // MAINWINDOW_H

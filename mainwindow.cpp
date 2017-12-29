@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::Menu), "First tab");
     ui->dockWidget_2->hide();
     QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ui->dockWidget_2->hide();} );
-//    set_node_id(5);
+    QObject::connect( this, &MainWindow::connect_button_toggled, this->ui->canvas, &DragWidget::start_connecting);
+    QObject::connect( this, &MainWindow::connect_button_not_toggled, this->ui->canvas, &DragWidget::stop_connecting);
 }
 
 MainWindow::~MainWindow()
@@ -26,4 +27,16 @@ void MainWindow::set_node_id(std::size_t id)
 void MainWindow::show_window()
 {
     ui->dockWidget_2->show();
+}
+
+void MainWindow::on_toolButton_4_toggled(bool checked)
+{
+    if(checked)
+    {
+        emit connect_button_toggled();
+    }
+    else
+    {
+        emit connect_button_not_toggled();
+    }
 }

@@ -27,7 +27,19 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void dropEvent(QDropEvent *event) override;
-    void mouseDoubleClickEvent(QMouseEvent *) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+
+    QPoint line_begin;
+    QPoint line_end;
+    bool is_drawing = false;
+    bool is_connecting = false;
+
+public slots:
+    void start_connecting();
+    void stop_connecting();
 
 signals:
     void close_dock_widget();
