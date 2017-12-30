@@ -182,14 +182,15 @@ void DragWidget::dropEvent(QDropEvent *event)
                 auto it = std::find(node_list.begin(), node_list.end(), obj);
                 if (it != node_list.end()) { node_list.erase(it); }
                 delete obj;
+                is_node_dropped = false;
             }
             else                          //Canvas -> Canvas
             {
                 move_node(*current_node, event->pos() - offset);
+                is_node_dropped = true;
             }
         }
 
-        is_node_dropped = true;
         this->repaint();
         event->accept();
     }
@@ -253,7 +254,10 @@ void DragWidget::paintEvent(QPaintEvent *event)
     if(is_connecting)
     {
         current_line = QLine{line_begin, line_end};
-        painter.drawLine(current_line);
+        if(line_begin != line_end && line_begin != QPoint{})
+        {
+            painter.drawLine(current_line);
+        }
         painter.drawLines(lines);
     }
     else if(is_disconnecting)
@@ -261,8 +265,10 @@ void DragWidget::paintEvent(QPaintEvent *event)
         painter.drawLines(lines);
         painter.setPen(QPen(Qt::red, 5, Qt::SolidLine));
         current_line = QLine{line_begin, line_end};
-        painter.drawLine(current_line);
-
+        if(line_begin != line_end  && line_begin != QPoint{})
+        {
+            painter.drawLine(current_line);
+        }
     }
     else if(is_node_dropped)
     {

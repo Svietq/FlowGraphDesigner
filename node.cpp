@@ -30,6 +30,6 @@ void Node::set_point_out()
 void Node::mouseDoubleClickEvent(QMouseEvent *)
 {
     const auto &top = static_cast<MainWindow*>(this->window());
-    top->set_node_id(id);
+    top->set_node_id(nodes_out.size());
     emit node_double_clicked();
 }
