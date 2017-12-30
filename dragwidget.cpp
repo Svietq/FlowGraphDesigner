@@ -219,12 +219,12 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
     {
         auto node = static_cast<Node*>(childAt(event->pos()));
         if(node && (node != current_node))
-        {
-            line_end = node->point_in;
+        {            
             if( current_node )
             {
                 if(is_connecting)
                 {
+                    line_end = node->point_in;
                     current_node->nodes_out.push_back(node);
                     node->nodes_in.push_back(current_node);
                     set_lines();
@@ -232,6 +232,7 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
                 else if(is_disconnecting)
                 {
                     delete_line(this, node);
+                    line_end = line_begin;
                 }
             }
         }
