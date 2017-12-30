@@ -43,6 +43,35 @@ namespace
 
         return data;
     }
+
+    QString print_lines(const QVector<QLine> & vec)
+    {
+        QString title;
+        for(const auto & x : vec)
+        {
+            title.append( QString::number(x.x1()) );
+            title.append(" ");
+            title.append( QString::number(x.x2()) );
+            title.append(" ");
+            title.append( QString::number(x.y1()) );
+            title.append(" ");
+            title.append( QString::number(x.y2()) );
+            title.append(" | ");
+        }
+
+        return title;
+    }
+
+    void delete_line(DragWidget * widget, Node * node)
+    {
+        QLine line{widget->current_node->point_out, node->point_in};
+        auto it = std::find(widget->lines.begin(), widget->lines.end(), line);
+        if (it != widget->lines.end()) { widget->lines.erase(it); }
+        auto it2 = std::find(widget->current_node->nodes_out.begin(), widget->current_node->nodes_out.end(), node);
+        if (it2 != widget->current_node->nodes_out.end()) { widget->current_node->nodes_out.erase(it2); }
+        it2 = std::find( node->nodes_in.begin(), node->nodes_in.end(), widget->current_node);
+        if (it2 != node->nodes_in.end()) { node->nodes_in.erase(it2); }
+    }
 }
 
 DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype}
@@ -88,7 +117,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    if(is_connecting)
+    if(is_connecting || is_disconnecting)
     {
         line_begin = current_node->point_out;
         is_drawing = true;
@@ -177,7 +206,7 @@ void DragWidget::mouseDoubleClickEvent(QMouseEvent * event)
 
 void DragWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if(is_connecting)
+    if(is_connecting || is_disconnecting)
     {
         line_end = event->pos();
         this->repaint();
@@ -186,7 +215,7 @@ void DragWidget::mouseMoveEvent(QMouseEvent *event)
 
 void DragWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(is_connecting)
+    if(is_connecting || is_disconnecting)
     {
         auto node = static_cast<Node*>(childAt(event->pos()));
         if(node && (node != current_node))
@@ -194,14 +223,21 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
             line_end = node->point_in;
             if( current_node )
             {
-                current_node->nodes_out.push_back(node);
-                node->nodes_in.push_back(current_node);
-                set_lines();
+                if(is_connecting)
+                {
+                    current_node->nodes_out.push_back(node);
+                    node->nodes_in.push_back(current_node);
+                    set_lines();
+                }
+                else if(is_disconnecting)
+                {
+                    delete_line(this, node);
+                }
             }
         }
         else
         {
-            line_end = event->pos();
+            line_end = line_begin;
         }
         is_drawing = false;
         this->repaint();
@@ -218,6 +254,14 @@ void DragWidget::paintEvent(QPaintEvent *event)
         current_line = QLine{line_begin, line_end};
         painter.drawLine(current_line);
         painter.drawLines(lines);
+    }
+    else if(is_disconnecting)
+    {
+        painter.drawLines(lines);
+        painter.setPen(QPen(Qt::red, 5, Qt::SolidLine));
+        current_line = QLine{line_begin, line_end};
+        painter.drawLine(current_line);
+
     }
     else if(is_node_dropped)
     {
@@ -241,13 +285,4 @@ void DragWidget::set_lines()
     }
 }
 
-void DragWidget::start_connecting()
-{
-    is_connecting = true;
-}
-
-void DragWidget::stop_connecting()
-{
-    is_connecting = false;
-}
 

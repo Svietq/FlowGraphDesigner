@@ -26,9 +26,12 @@ public slots:
 signals:
     void connect_button_toggled();
     void connect_button_not_toggled();
+    void disconnect_button_toggled();
+    void disconnect_button_not_toggled();
 
 private slots:
     void on_toolButton_4_toggled(bool checked);
+    void on_toolButton_3_toggled(bool checked);
 };
 
 #endif // MAINWINDOW_H

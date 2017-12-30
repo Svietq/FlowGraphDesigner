@@ -9,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::Menu), "First tab");
     ui->dockWidget_2->hide();
-    QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ui->dockWidget_2->hide();} );
-    QObject::connect( this, &MainWindow::connect_button_toggled, this->ui->canvas, &DragWidget::start_connecting);
-    QObject::connect( this, &MainWindow::connect_button_not_toggled, this->ui->canvas, &DragWidget::stop_connecting);
+    QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ ui->dockWidget_2->hide(); } );
+    QObject::connect( this, &MainWindow::connect_button_toggled, [this](){ this->ui->canvas->is_connecting = true; });
+    QObject::connect( this, &MainWindow::connect_button_not_toggled, [this](){ this->ui->canvas->is_connecting = false; });
+    QObject::connect( this, &MainWindow::disconnect_button_toggled, [this](){ this->ui->canvas->is_disconnecting = true; });
+    QObject::connect( this, &MainWindow::disconnect_button_not_toggled, [this](){ this->ui->canvas->is_disconnecting = false; });
 }
 
 MainWindow::~MainWindow()
@@ -33,10 +35,24 @@ void MainWindow::on_toolButton_4_toggled(bool checked)
 {
     if(checked)
     {
+        ui->toolButton_3->setChecked(false);
         emit connect_button_toggled();
     }
     else
     {
         emit connect_button_not_toggled();
+    }
+}
+
+void MainWindow::on_toolButton_3_toggled(bool checked)
+{
+    if(checked)
+    {
+        ui->toolButton_4->setChecked(false);
+        emit disconnect_button_toggled();
+    }
+    else
+    {
+        emit disconnect_button_not_toggled();
     }
 }

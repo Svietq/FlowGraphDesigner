@@ -21,6 +21,10 @@ public:
     Node * current_node = nullptr;
     QVector<Node*> node_list;
 
+    bool is_connecting = false;
+    bool is_disconnecting = false;
+    QVector<QLine> lines;
+
 protected:
     const QString mime_format = "application/x-dnditemdata";
 
@@ -36,18 +40,14 @@ protected:
     QPoint line_begin{};
     QPoint line_end{};
     bool is_drawing = false;
-    bool is_connecting = false;
     QLine current_line;
-    QVector<QLine> lines;
+
     bool is_node_dropped = false;
     void set_lines();
 
-public slots:
-    void start_connecting();
-    void stop_connecting();
-
 signals:
     void close_dock_widget();
+
 
 };
 
