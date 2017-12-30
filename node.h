@@ -11,18 +11,21 @@ public:
     explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map);}
     ~Node();
 
-    unsigned int id=0;
+    unsigned int id = 0;
     QPoint point_in;
     QPoint point_out;
 
     QVector<Node*> nodes_in;
     QVector<Node*> nodes_out;
 
+    void set_point_in();
+    void set_point_out();
+
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
 
 signals:
-    void node_clicked();
+    void node_double_clicked();
 };
 
 #endif // NODE_H

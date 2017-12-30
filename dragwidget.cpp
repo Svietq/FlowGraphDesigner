@@ -21,6 +21,13 @@ namespace
         return newNode;
     }
 
+    void move_node(Node & node, const QPoint & pos)
+    {
+        node.move(pos);
+        node.set_point_in();
+        node.set_point_out();
+    }
+
     QDataStream & operator<<( QDataStream & data, const Node & node)
     {
         data << node.id << *node.pixmap();
@@ -57,25 +64,15 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
             if( event->source() != this ) //Menu -> Canvas
             {
                 event->setDropAction(Qt::CopyAction);
-                event->accept();
             }
             else                          //Menu -> Menu
             {
                 event->ignore();
+                return;
             }
         }
-        else if(static_cast<DragWidget*>(event->source())->type == Type::Canvas)
-        {
-            if( event->source() != this ) //Canvas -> Menu
-            {
-                event->accept();
-            }
-            else                          //Canvas -> Canvas
-            {
-                event->setDropAction(Qt::MoveAction);
-                event->accept();
-            }
-        }
+
+        event->accept();
     }
     else
     {
@@ -159,11 +156,12 @@ void DragWidget::dropEvent(QDropEvent *event)
             }
             else                          //Canvas -> Canvas
             {
-                create_node(this, event->pos() - offset, *new_node.pixmap(), new_node.id);
-                event->setDropAction(Qt::MoveAction);
+                move_node(*current_node, event->pos() - offset);
             }
         }
 
+        is_node_dropped = true;
+        this->repaint();
         event->accept();
     }
     else
@@ -198,8 +196,7 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
             {
                 current_node->nodes_out.push_back(node);
                 node->nodes_in.push_back(current_node);
-                QLine line{current_node->point_out, node->point_in};
-                lines.push_back(line);
+                set_lines();
             }
         }
         else
@@ -213,17 +210,34 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void DragWidget::paintEvent(QPaintEvent *event)
 {
-//    window()->setWindowTitle("painting");
+    painter.begin(this);
+    painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
+
     if(is_connecting)
     {
-        painter.begin(this);
-        painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
         current_line = QLine{line_begin, line_end};
         painter.drawLine(current_line);
-
         painter.drawLines(lines);
+    }
+    else if(is_node_dropped)
+    {
+        set_lines();
+        painter.drawLines(lines);
+    }
 
-        painter.end();
+    painter.end();
+}
+
+void DragWidget::set_lines()
+{
+    lines.clear();
+    for(const auto & node : node_list)
+    {
+        for(const auto & in : node->nodes_in)
+        {
+            QLine line{ in->point_out, node->point_in};
+            lines.push_back(line);
+        }
     }
 }
 

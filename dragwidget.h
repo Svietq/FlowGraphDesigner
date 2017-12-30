@@ -20,7 +20,6 @@ public:
     explicit DragWidget(QWidget *parent = nullptr, Type itype = Type::Canvas);
     Node * current_node = nullptr;
     QVector<Node*> node_list;
-    std::size_t no_of_nodes;
 
 protected:
     const QString mime_format = "application/x-dnditemdata";
@@ -40,6 +39,8 @@ protected:
     bool is_connecting = false;
     QLine current_line;
     QVector<QLine> lines;
+    bool is_node_dropped = false;
+    void set_lines();
 
 public slots:
     void start_connecting();
