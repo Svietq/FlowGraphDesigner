@@ -25,16 +25,18 @@ public:
     bool is_disconnecting = false;
     QVector<QLine> lines;
 
+    QString node_ids;
+
 protected:
     const QString mime_format = "application/x-dnditemdata";
 
     void dragEnterEvent(QDragEnterEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void dropEvent(QDropEvent *event) override;
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
 
     QPainter painter;
     QPoint line_begin{};
@@ -45,6 +47,10 @@ protected:
     bool is_node_dropped = false;
     void set_lines();
 
+    void print_node_ids();
+    unsigned int highest_node_id = 0;
+    void delete_node(DragWidget* source);
+    void start_node_movement(QMouseEvent *event);
 signals:
     void close_dock_widget();
 

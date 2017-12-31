@@ -2,7 +2,7 @@
 #include "dragwidget.h"
 #include "mainwindow.h"
 
-Node::Node(QWidget *parent, const QPixmap & map, const QPoint &p, size_t n) : QLabel{parent}, id{n}
+Node::Node(QWidget *parent, const QPixmap & map, const QPoint &p, unsigned int n) : QLabel{parent}, id{n}
 {
     setPixmap(map);
     move(p);
@@ -10,11 +10,6 @@ Node::Node(QWidget *parent, const QPixmap & map, const QPoint &p, size_t n) : QL
     QObject::connect( this, &Node::node_double_clicked, top, &MainWindow::show_window );
     set_point_in();
     set_point_out();
-}
-
-Node::~Node()
-{
-
 }
 
 void Node::set_point_in()
@@ -30,6 +25,6 @@ void Node::set_point_out()
 void Node::mouseDoubleClickEvent(QMouseEvent *)
 {
     const auto &top = static_cast<MainWindow*>(this->window());
-    top->set_node_id(nodes_out.size());
+    top->set_node_id(id);
     emit node_double_clicked();
 }

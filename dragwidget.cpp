@@ -1,6 +1,7 @@
 #include "dragwidget.h"
 
 #include <QtWidgets>
+#include "mainwindow.h"
 
 namespace
 {
@@ -69,8 +70,8 @@ namespace
         if (it != widget->lines.end()) { widget->lines.erase(it); }
         auto it2 = std::find(widget->current_node->nodes_out.begin(), widget->current_node->nodes_out.end(), node);
         if (it2 != widget->current_node->nodes_out.end()) { widget->current_node->nodes_out.erase(it2); }
-        it2 = std::find( node->nodes_in.begin(), node->nodes_in.end(), widget->current_node);
-        if (it2 != node->nodes_in.end()) { node->nodes_in.erase(it2); }
+        auto it3 = std::find( node->nodes_in.begin(), node->nodes_in.end(), widget->current_node);
+        if (it3 != node->nodes_in.end()) { node->nodes_in.erase(it3); }
     }
 }
 
@@ -124,28 +125,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
     }
     else
     {
-        //node moving
-        QPixmap pixmap = *current_node->pixmap();
-
-        QByteArray itemData;
-        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-        dataStream << *current_node << QPoint(event->pos() - current_node->pos());
-
-        QMimeData *mimeData = new QMimeData;
-        mimeData->setData(mime_format, itemData);
-
-        QDrag *drag = new QDrag(this);
-        drag->setMimeData(mimeData);
-        drag->setPixmap(pixmap);
-        drag->setHotSpot(event->pos() - current_node->pos());
-
-        if(current_node)
-        {
-            if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
-            {
-                current_node->close();
-            }
-        }
+        start_node_movement(event);
     }
 }
 
@@ -160,11 +140,13 @@ void DragWidget::dropEvent(QDropEvent *event)
         Node new_node{this};
         dataStream >> new_node >> offset;
 
-        if(static_cast<DragWidget*>(event->source())->type == Type::Menu)
+        auto source = static_cast<DragWidget*>(event->source());
+
+        if(source->type == Type::Menu)
         {
-            if( event->source() != this ) //Menu -> Canvas
+            if( source != this ) //Menu -> Canvas
             {
-                auto node = create_node(this, event->pos() - offset, *new_node.pixmap(), node_list.size());
+                auto node = create_node(this, event->pos() - offset, *new_node.pixmap(), highest_node_id++);
                 node_list.push_back(node);
                 event->setDropAction(Qt::CopyAction);
             }
@@ -174,20 +156,18 @@ void DragWidget::dropEvent(QDropEvent *event)
                 return;
             }
         }
-        else if(static_cast<DragWidget*>(event->source())->type == Type::Canvas)
+        else if(source->type == Type::Canvas)
         {
-            if( event->source() != this ) //Canvas -> Menu
+            if( source != this ) //Canvas -> Menu
             {
-                auto obj = static_cast<DragWidget*>(event->source())->current_node;
-                auto it = std::find(node_list.begin(), node_list.end(), obj);
-                if (it != node_list.end()) { node_list.erase(it); }
-                delete obj;
+                delete_node(source);
                 is_node_dropped = false;
             }
             else                          //Canvas -> Canvas
             {
                 move_node(*current_node, event->pos() - offset);
                 is_node_dropped = true;
+                set_lines();
             }
         }
 
@@ -200,7 +180,7 @@ void DragWidget::dropEvent(QDropEvent *event)
     }
 }
 
-void DragWidget::mouseDoubleClickEvent(QMouseEvent * event)
+void DragWidget::mouseDoubleClickEvent(QMouseEvent * )
 {
     emit close_dock_widget();
 }
@@ -246,7 +226,7 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void DragWidget::paintEvent(QPaintEvent *event)
+void DragWidget::paintEvent(QPaintEvent *)
 {
     painter.begin(this);
     painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
@@ -272,7 +252,7 @@ void DragWidget::paintEvent(QPaintEvent *event)
     }
     else if(is_node_dropped)
     {
-        set_lines();
+
         painter.drawLines(lines);
     }
 
@@ -288,6 +268,53 @@ void DragWidget::set_lines()
         {
             QLine line{ in->point_out, node->point_in};
             lines.push_back(line);
+        }
+    }
+}
+
+void DragWidget::print_node_ids()
+{
+    node_ids.clear();
+    for(const auto & node : node_list)
+    {
+        node_ids.append(QString::number(node->id));
+        node_ids.append(" ");
+    }
+    window()->setWindowTitle(node_ids);
+}
+
+void DragWidget::delete_node(DragWidget *source)
+{
+    auto obj = source->current_node;
+    auto it = std::find(source->node_list.begin(), source->node_list.end(), obj);
+    if (it != source->node_list.end() && obj->nodes_in.empty() && obj->nodes_out.empty())
+    {
+        source->node_list.erase(it);
+        delete obj;
+    }
+}
+
+void DragWidget::start_node_movement(QMouseEvent *event)
+{
+    QPixmap pixmap = *current_node->pixmap();
+
+    QByteArray itemData;
+    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+    dataStream << *current_node << QPoint(event->pos() - current_node->pos());
+
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData(mime_format, itemData);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(event->pos() - current_node->pos());
+
+    if(current_node)
+    {
+        if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
+        {
+            current_node->close();
         }
     }
 }
