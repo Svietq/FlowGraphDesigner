@@ -27,12 +27,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     dragwidget.cpp \
-    node.cpp
+    node.cpp \
+    continousnode.cpp \
+    sourcenode.cpp
 
 HEADERS += \
         mainwindow.h \
     dragwidget.h \
-    node.h
+    node.h \
+    continousnode.h \
+    sourcenode.h
 
 FORMS += \
         mainwindow.ui

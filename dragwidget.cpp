@@ -2,15 +2,22 @@
 
 #include <QtWidgets>
 #include "mainwindow.h"
+#include "continousnode.h"
+#include "sourcenode.h"
 
 namespace
 {
     void set_node_icons(QWidget *parent)
     {
-        Node *node = new Node(parent, QPixmap(":/icons/function.png"), true);
-        node->move(10, 10);
-        node->show();
-        node->setAttribute(Qt::WA_DeleteOnClose);
+        Node *source = new SourceNode(parent, true);
+        source->move(35, 10);
+        source->show();
+        source->setAttribute(Qt::WA_DeleteOnClose);
+
+        Node *continous = new ContinousNode(parent, true);
+        continous->move(10, 120);
+        continous->show();
+        continous->setAttribute(Qt::WA_DeleteOnClose);
     }
 
     Node* create_node(QWidget *parent, const QPoint & pos, const QPixmap & pixmap, std::size_t id)

@@ -7,8 +7,9 @@ class Node : public QLabel
 {
     Q_OBJECT
 public:
-    explicit Node(QWidget *parent = nullptr, const QPixmap &map = QPixmap{}, const QPoint & p = QPoint{}, unsigned int n=0);
-    explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map);}
+    explicit Node(QWidget *parent = nullptr, const QPixmap &map = QPixmap{}, const QPoint & p = QPoint{}, unsigned int n = 0);
+    explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map); }
+    explicit Node(QWidget *parent, bool) :  QLabel{parent} { }
 
     unsigned int id = 0;
     QPoint point_in;
