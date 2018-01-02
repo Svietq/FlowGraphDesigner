@@ -24,6 +24,7 @@ public:
     bool is_connecting = false;
     bool is_disconnecting = false;
     QVector<QLine> lines;
+    QVector< QPair<Node*, Node*> > edges;
 
     QString node_ids;
 

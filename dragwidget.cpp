@@ -7,7 +7,7 @@ namespace
 {
     void set_node_icons(QWidget *parent)
     {
-        Node *node = new Node(parent, QPixmap(":/icons/node.png"), true);
+        Node *node = new Node(parent, QPixmap(":/icons/function.png"), true);
         node->move(10, 10);
         node->show();
         node->setAttribute(Qt::WA_DeleteOnClose);
@@ -72,6 +72,8 @@ namespace
         if (it2 != widget->current_node->nodes_out.end()) { widget->current_node->nodes_out.erase(it2); }
         auto it3 = std::find( node->nodes_in.begin(), node->nodes_in.end(), widget->current_node);
         if (it3 != node->nodes_in.end()) { node->nodes_in.erase(it3); }
+        auto it4 = std::find( widget->edges.begin(), widget->edges.end(), QPair<Node*, Node*>{widget->current_node, node});
+        if (it4 != widget->edges.end()) { widget->edges.erase(it4); }
     }
 }
 
@@ -144,7 +146,7 @@ void DragWidget::dropEvent(QDropEvent *event)
 
         if(source->type == Type::Menu)
         {
-            if( source != this ) //Menu -> Canvas
+            if( source != this )          //Menu -> Canvas
             {
                 auto node = create_node(this, event->pos() - offset, *new_node.pixmap(), highest_node_id++);
                 node_list.push_back(node);
@@ -158,7 +160,7 @@ void DragWidget::dropEvent(QDropEvent *event)
         }
         else if(source->type == Type::Canvas)
         {
-            if( source != this ) //Canvas -> Menu
+            if( source != this )          //Canvas -> Menu
             {
                 delete_node(source);
                 is_node_dropped = false;
@@ -206,9 +208,14 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
                 if(is_connecting)
                 {
                     line_end = node->point_in;
-                    current_node->nodes_out.push_back(node);
-                    node->nodes_in.push_back(current_node);
-                    set_lines();
+                    auto it = std::find( edges.begin(), edges.end(), QPair<Node*, Node*>{current_node, node});
+                    if (it == edges.end())
+                    {
+                        current_node->nodes_out.push_back(node);
+                        node->nodes_in.push_back(current_node);
+                        edges.push_back(QPair<Node*, Node*>{current_node, node});
+                        set_lines();
+                    }
                 }
                 else if(is_disconnecting)
                 {
@@ -262,13 +269,10 @@ void DragWidget::paintEvent(QPaintEvent *)
 void DragWidget::set_lines()
 {
     lines.clear();
-    for(const auto & node : node_list)
+    for(const auto & edge : edges)
     {
-        for(const auto & in : node->nodes_in)
-        {
-            QLine line{ in->point_out, node->point_in};
-            lines.push_back(line);
-        }
+        QLine line{ edge.first->point_out, edge.second->point_in };
+        lines.push_back(line);
     }
 }
 
