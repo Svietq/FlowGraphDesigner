@@ -16,7 +16,7 @@ class DragWidget : public QFrame
     Q_OBJECT
 
 public:
-    enum class Type { Menu, Canvas } type;
+    enum class Type { MenuComputational, MenuJoinSplit, Canvas } type;
     explicit DragWidget(QWidget *parent = nullptr, Type itype = Type::Canvas);
     Node * current_node = nullptr;
     QVector<Node*> node_list;

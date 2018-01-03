@@ -2,16 +2,21 @@
 
 #include <QtWidgets>
 #include "mainwindow.h"
-#include "continuousnode.h"
-#include "sourcenode.h"
 
 namespace
 {
-    void set_node_icons(QWidget *parent)
+    void set_node_icons(QWidget *parent, DragWidget::Type type)
     {
-        Node::create(Node::Type::Source, parent, true);
-        Node::create(Node::Type::Continuous, parent, true);
-        Node::create(Node::Type::Function, parent, true);
+        if(type == DragWidget::Type::MenuComputational)
+        {
+            Node::create(Node::Type::Source, parent, true);
+            Node::create(Node::Type::Continuous, parent, true);
+            Node::create(Node::Type::Function, parent, true);
+        }
+        else if(type == DragWidget::Type::MenuJoinSplit)
+        {
+            Node::create(Node::Type::ReservingJoin, parent, true);
+        }
     }
 
     QDataStream & operator<<( QDataStream & data, const Node & node)
@@ -48,9 +53,9 @@ DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype
 {
     setAcceptDrops(true);
 
-    if(itype == Type::Menu)
+    if(itype == Type::MenuComputational || itype == Type::MenuJoinSplit)
     {
-        set_node_icons(this);
+        set_node_icons(this, itype);
     }
 }
 
@@ -58,7 +63,8 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasFormat(mime_format))
     {
-        if(static_cast<DragWidget*>(event->source())->type == Type::Menu)
+        if(static_cast<DragWidget*>(event->source())->type == Type::MenuComputational ||
+           static_cast<DragWidget*>(event->source())->type == Type::MenuJoinSplit  )
         {
             if( event->source() != this ) //Menu -> Canvas
             {
@@ -111,7 +117,7 @@ void DragWidget::dropEvent(QDropEvent *event)
 
         auto source = static_cast<DragWidget*>(event->source());
 
-        if(source->type == Type::Menu)
+        if(source->type == Type::MenuComputational || source->type == Type::MenuJoinSplit)
         {
             if( source != this )          //Menu -> Canvas
             {

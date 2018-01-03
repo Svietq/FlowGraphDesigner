@@ -30,7 +30,8 @@ SOURCES += \
     node.cpp \
     sourcenode.cpp \
     continuousnode.cpp \
-    functionnode.cpp
+    functionnode.cpp \
+    reservingjoinnode.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     node.h \
     sourcenode.h \
     continuousnode.h \
-    functionnode.h
+    functionnode.h \
+    reservingjoinnode.h
 
 FORMS += \
         mainwindow.ui

@@ -4,6 +4,7 @@
 #include "sourcenode.h"
 #include "continuousnode.h"
 #include "functionnode.h"
+#include "reservingjoinnode.h"
 
 Node::Node(QWidget *parent, const QPoint &p, unsigned int n) : QLabel{parent}, id{n}
 {
@@ -17,13 +18,12 @@ Node *Node::create(Node::Type type, QWidget *parent, const QPoint &p, unsigned i
     switch (type) {
     case Type::Source:
         return new SourceNode{parent, p, n};
-        break;
     case Type::Continuous:
         return new ContinuousNode{parent, p, n};
-        break;
     case Type::Function:
         return new FunctionNode{parent, p, n};
-        break;
+    case Type::ReservingJoin:
+        return new ReservingJoinNode{parent, p, n};
     }
     throw std::invalid_argument("The node does not exist");
 }
@@ -33,13 +33,12 @@ Node *Node::create(Node::Type type, QWidget *parent, bool)
     switch (type) {
     case Type::Source:
         return new SourceNode{parent, true};
-        break;
     case Type::Continuous:
         return new ContinuousNode{parent, true};
-        break;
     case Type::Function:
         return new FunctionNode{parent, true};
-        break;
+    case Type::ReservingJoin:
+        return new ReservingJoinNode{parent, true};
     }
     throw std::invalid_argument("The node does not exist");
 }
