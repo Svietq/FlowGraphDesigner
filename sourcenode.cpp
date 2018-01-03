@@ -17,3 +17,19 @@ SourceNode::SourceNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/s
     show();
     setAttribute(Qt::WA_DeleteOnClose);
 }
+
+bool SourceNode::connect_node(Node * node)
+{
+    Node::connect_node(node);
+}
+
+bool SourceNode::connect_from_out(Node *node)
+{
+    nodes_out.push_back(node);
+    return true;
+}
+
+bool SourceNode::connect_to_in(Node *node)
+{
+    return false;
+}

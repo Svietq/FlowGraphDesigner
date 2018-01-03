@@ -52,6 +52,8 @@ protected:
     unsigned int highest_node_id = 0;
     void delete_node(DragWidget* source);
     void start_node_movement(QMouseEvent *event);
+    bool connect_nodes(Node * first, Node * second);
+
 signals:
     void close_dock_widget();
 

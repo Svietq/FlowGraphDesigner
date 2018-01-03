@@ -4,26 +4,12 @@
 #include "sourcenode.h"
 #include "continuousnode.h"
 
-//Node::Node(QWidget *parent, const QPixmap & map, const QPoint &p, unsigned int n) : QLabel{parent}, id{n}
-//{
-//    setPixmap(map);
-//    move(p);
-//    const auto &top = static_cast<MainWindow*>(this->window());
-//    QObject::connect( this, &Node::node_double_clicked, top, &MainWindow::show_window );
-//    set_point_in();
-//    set_point_out();
-//}
-
 Node::Node(QWidget *parent, const QPoint &p, unsigned int n) : QLabel{parent}, id{n}
 {
     move(p);
     const auto &top = static_cast<MainWindow*>(this->window());
     QObject::connect( this, &Node::node_double_clicked, top, &MainWindow::show_window );
-//    set_point_in();
-//    set_point_out();
 }
-
-//ContinuousNode::ContinuousNode(QWidget *parent, const QPixmap & map, const QPoint &p, unsigned int n) ;
 
 Node *Node::create(Node::Type type, QWidget *parent, const QPoint &p, unsigned int n)
 {
@@ -66,6 +52,25 @@ void Node::move_node(const QPoint & pos)
     move(pos);
     set_point_in();
     set_point_out();
+}
+
+bool Node::connect_node(Node *node)
+{
+    if(!connect_from_out(node)){ return false; }
+    if(!node->connect_to_in(this)){ return false;}
+    return true;
+}
+
+bool Node::connect_from_out(Node *node)
+{
+    nodes_out.push_back(node);
+    return true;
+}
+
+bool Node::connect_to_in(Node *node)
+{
+    nodes_in.push_back(node);
+    return true;
 }
 
 void Node::mouseDoubleClickEvent(QMouseEvent *)

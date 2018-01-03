@@ -9,16 +9,8 @@ namespace
 {
     void set_node_icons(QWidget *parent)
     {
-//        Node *source = new SourceNode(parent, true);
         Node::create(Node::Type::Source, parent, true);
-//        source->move(35, 10);
-//        source->show();
-//        source->setAttribute(Qt::WA_DeleteOnClose);
         Node::create(Node::Type::Continuous, parent, true);
-//        Node *continous = new ContinuousNode(parent, true);
-//        continous->move(10, 120);
-//        continous->show();
-//        continous->setAttribute(Qt::WA_DeleteOnClose);
     }
 
     QDataStream & operator<<( QDataStream & data, const Node & node)
@@ -181,14 +173,9 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
             {
                 if(is_connecting)
                 {
-                    line_end = node->point_in;
-                    auto it = std::find( edges.begin(), edges.end(), QPair<Node*, Node*>{current_node, node});
-                    if (it == edges.end())
+                    if(!connect_nodes(current_node, node))
                     {
-                        current_node->nodes_out.push_back(node);
-                        node->nodes_in.push_back(current_node);
-                        edges.push_back(QPair<Node*, Node*>{current_node, node});
-                        set_lines();
+                        line_end = line_begin;
                     }
                 }
                 else if(is_disconnecting)
@@ -295,6 +282,26 @@ void DragWidget::start_node_movement(QMouseEvent *event)
             current_node->close();
         }
     }
+}
+
+bool DragWidget::connect_nodes(Node *first, Node *second)
+{
+    line_end = second->point_in;
+    auto it = std::find( edges.begin(), edges.end(), QPair<Node*, Node*>{first, second});
+    if (it == edges.end())
+    {
+        if(first->connect_node(second))
+        {
+            edges.push_back(QPair<Node*, Node*>{first, second});
+            set_lines();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
 }
 
 

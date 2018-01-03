@@ -12,7 +12,6 @@ public:
                            unsigned int n = 0);
     explicit ContinuousNode(QWidget *parent, bool);
 
-
 };
 
 

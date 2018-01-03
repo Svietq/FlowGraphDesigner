@@ -7,7 +7,6 @@ class Node : public QLabel
 {
     Q_OBJECT
 public:
-//    explicit Node(QWidget *parent = nullptr, const QPixmap &map = QPixmap{}, const QPoint & p = QPoint{}, unsigned int n = 0);
     explicit Node(QWidget *parent = nullptr, const QPoint & p = QPoint{}, unsigned int n = 0);
     explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map); }
     explicit Node(QWidget *parent, bool) :  QLabel{parent} { }
@@ -27,6 +26,9 @@ public:
     void set_point_out();
 
     void move_node(const QPoint &pos);
+    virtual bool connect_node(Node * node);
+    virtual bool connect_from_out(Node * node);
+    virtual bool connect_to_in(Node * node);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
