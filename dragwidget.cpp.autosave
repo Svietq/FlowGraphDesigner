@@ -9,16 +9,8 @@ namespace
 {
     void set_node_icons(QWidget *parent)
     {
-//        Node *source = new SourceNode(parent, true);
         Node::create(Node::Type::Source, parent, true);
-//        source->move(35, 10);
-//        source->show();
-//        source->setAttribute(Qt::WA_DeleteOnClose);
         Node::create(Node::Type::Continuous, parent, true);
-//        Node *continous = new ContinuousNode(parent, true);
-//        continous->move(10, 120);
-//        continous->show();
-//        continous->setAttribute(Qt::WA_DeleteOnClose);
     }
 
     QDataStream & operator<<( QDataStream & data, const Node & node)

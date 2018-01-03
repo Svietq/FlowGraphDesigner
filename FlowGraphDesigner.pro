@@ -28,15 +28,15 @@ SOURCES += \
         mainwindow.cpp \
     dragwidget.cpp \
     node.cpp \
-    continousnode.cpp \
-    sourcenode.cpp
+    sourcenode.cpp \
+    continuousnode.cpp
 
 HEADERS += \
         mainwindow.h \
     dragwidget.h \
     node.h \
-    continousnode.h \
-    sourcenode.h
+    sourcenode.h \
+    continuousnode.h
 
 FORMS += \
         mainwindow.ui

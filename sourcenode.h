@@ -7,11 +7,8 @@ class SourceNode : public Node
 {
     Q_OBJECT
 public:
-    explicit SourceNode(QWidget *parent = nullptr,
-                           const QPixmap &map = QPixmap{},
-                           const QPoint & p = QPoint{},
-                           unsigned int n = 0);
-    explicit SourceNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/source.png"}, true} { }
+    explicit SourceNode(QWidget *parent, const QPoint &p, unsigned int n);
+    explicit SourceNode(QWidget *parent, bool);
 
 };
 

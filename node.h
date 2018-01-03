@@ -7,9 +7,14 @@ class Node : public QLabel
 {
     Q_OBJECT
 public:
-    explicit Node(QWidget *parent = nullptr, const QPixmap &map = QPixmap{}, const QPoint & p = QPoint{}, unsigned int n = 0);
+//    explicit Node(QWidget *parent = nullptr, const QPixmap &map = QPixmap{}, const QPoint & p = QPoint{}, unsigned int n = 0);
+    explicit Node(QWidget *parent = nullptr, const QPoint & p = QPoint{}, unsigned int n = 0);
     explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map); }
     explicit Node(QWidget *parent, bool) :  QLabel{parent} { }
+
+    enum class Type {Source, Continuous} type;
+    static Node* create(Type type, QWidget *parent, const QPoint &p, unsigned int n);
+    static Node* create(Type type, QWidget *parent, bool);
 
     unsigned int id = 0;
     QPoint point_in;
@@ -20,6 +25,8 @@ public:
 
     void set_point_in();
     void set_point_out();
+
+    void move_node(const QPoint &pos);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
