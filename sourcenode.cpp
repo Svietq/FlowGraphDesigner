@@ -20,7 +20,7 @@ SourceNode::SourceNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/s
 
 bool SourceNode::connect_node(Node * node)
 {
-    Node::connect_node(node);
+    return Node::connect_node(node);
 }
 
 bool SourceNode::connect_from_out(Node *node)
@@ -29,7 +29,7 @@ bool SourceNode::connect_from_out(Node *node)
     return true;
 }
 
-bool SourceNode::connect_to_in(Node *node)
+bool SourceNode::connect_to_in(Node *)
 {
     return false;
 }

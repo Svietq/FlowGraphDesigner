@@ -12,7 +12,7 @@ public:
 
     bool connect_node(Node *node) override;
     bool connect_from_out(Node * node) override;
-    bool connect_to_in(Node * node) override;
+    bool connect_to_in(Node *) override;
 
 };
 

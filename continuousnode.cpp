@@ -21,7 +21,7 @@ ContinuousNode::ContinuousNode(QWidget *parent, bool) :  Node{parent, QPixmap{":
 
 bool ContinuousNode::connect_node(Node * node)
 {
-    Node::connect_node(node);
+    return Node::connect_node(node);
 }
 
 bool ContinuousNode::connect_from_out(Node *node)

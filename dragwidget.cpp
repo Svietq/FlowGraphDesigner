@@ -11,6 +11,7 @@ namespace
     {
         Node::create(Node::Type::Source, parent, true);
         Node::create(Node::Type::Continuous, parent, true);
+        Node::create(Node::Type::Function, parent, true);
     }
 
     QDataStream & operator<<( QDataStream & data, const Node & node)

@@ -11,7 +11,7 @@ public:
     explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map); }
     explicit Node(QWidget *parent, bool) :  QLabel{parent} { }
 
-    enum class Type {Source, Continuous} type;
+    enum class Type {Source, Continuous, Function} type;
     static Node* create(Type type, QWidget *parent, const QPoint &p, unsigned int n);
     static Node* create(Type type, QWidget *parent, bool);
 

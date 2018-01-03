@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "sourcenode.h"
 #include "continuousnode.h"
+#include "functionnode.h"
 
 Node::Node(QWidget *parent, const QPoint &p, unsigned int n) : QLabel{parent}, id{n}
 {
@@ -20,6 +21,9 @@ Node *Node::create(Node::Type type, QWidget *parent, const QPoint &p, unsigned i
     case Type::Continuous:
         return new ContinuousNode{parent, p, n};
         break;
+    case Type::Function:
+        return new FunctionNode{parent, p, n};
+        break;
     }
     throw std::invalid_argument("The node does not exist");
 }
@@ -32,6 +36,9 @@ Node *Node::create(Node::Type type, QWidget *parent, bool)
         break;
     case Type::Continuous:
         return new ContinuousNode{parent, true};
+        break;
+    case Type::Function:
+        return new FunctionNode{parent, true};
         break;
     }
     throw std::invalid_argument("The node does not exist");
