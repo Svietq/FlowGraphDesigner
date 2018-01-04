@@ -21,7 +21,6 @@ public:
 protected:
     const unsigned int no_of_ports = 4;
     bool are_ports_in_full = false;
-    void set_ports();
 
 private slots:
     void set_current_port_in();

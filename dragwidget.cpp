@@ -37,7 +37,16 @@ namespace
 
     void delete_line(DragWidget * widget, Node * node)
     {
-        emit widget->deleted_line();
+        auto ptr = node->current_port_in ? --node->current_port_in :  &node->ports_in.back();
+        if(ptr != &node->ports_in.back()){ ++node->current_port_in; }
+
+        auto it1 = std::find(widget->current_node->current_port_out->connected_ports.begin(),
+                             widget->current_node->current_port_out->connected_ports.end(),
+                             ptr);
+
+        if (it1 != widget->current_node->current_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+
+        if(!node->current_port_in) { return; }
 
         QLine line{widget->current_node->current_port_out->pos, node->current_port_in->pos};
         //erase line painted on canvas
@@ -59,6 +68,7 @@ namespace
                               widget->current_node->current_port_out->connected_ports.end(),
                               node->current_port_in);
         if (it6 != widget->current_node->current_port_out->connected_ports.end()) { widget->current_node->current_port_out->connected_ports.erase(it6); }
+
     }
 }
 
@@ -271,8 +281,23 @@ void DragWidget::print_node_ids()
 void DragWidget::delete_node(DragWidget *source)
 {
     auto obj = source->current_node;
+
+    for(const auto & port : obj->ports_in)
+    {
+        if(!port.connected_ports.isEmpty())
+        {
+            return;
+        }
+    }
+    for(const auto & port : obj->ports_out)
+    {
+        if(!port.connected_ports.isEmpty())
+        {
+            return;
+        }
+    }
     auto it = std::find(source->node_list.begin(), source->node_list.end(), obj);
-    if (it != source->node_list.end() && obj->current_port_in->connected_ports.isEmpty() && obj->current_port_out->connected_ports.isEmpty())
+    if (it != source->node_list.end())
     {
         source->node_list.erase(it);
         delete obj;

@@ -13,7 +13,6 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, const QPoint &p, unsigned 
     current_port_out = &ports_out[0];
     type = Type::ReservingJoin;
     setPixmap(QPixmap{":/icons/reserving_join.png"});
-//    set_ports();
     set_point_in();
     set_point_out();
     show();
@@ -34,16 +33,6 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, bool) :  Node{parent, QPix
 }
 
 void ReservingJoinNode::set_point_in()
-{
-    int h = pixmap()->height()/no_of_ports;
-    for(auto & port : ports_in)
-    {
-        port.pos = this->pos() + QPoint{ 0, h };
-        h += pixmap()->height()/no_of_ports;
-    }
-}
-
-void ReservingJoinNode::set_ports()
 {
     int h = pixmap()->height()/no_of_ports;
     for(auto & port : ports_in)
