@@ -19,26 +19,25 @@ FunctionNode::FunctionNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/ico
 }
 
 
-bool FunctionNode::connect_node(Node * node)
+bool FunctionNode::connect_port(Port * port)
 {
-    return Node::connect_node(node);
+    return Node::connect_port(port);
 }
 
-bool FunctionNode::connect_from_out(Node *node)
+bool FunctionNode::connect_from_out(Port * port)
 {
-    nodes_out.push_back(node);
-    return true;
+    return Node::connect_from_out(port);
 }
 
-bool FunctionNode::connect_to_in(Node *node)
+bool FunctionNode::connect_to_in(Port * port)
 {
-    if(nodes_in.isEmpty())
+    if(current_port_in->connected_ports.isEmpty())
     {
-        nodes_in.push_back(node);
-        return true;
+        return Node::connect_to_in(port);
     }
     else
     {
+        port->connected_ports.pop_back();
         return false;
     }
 }

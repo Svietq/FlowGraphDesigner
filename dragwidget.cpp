@@ -37,15 +37,26 @@ namespace
 
     void delete_line(DragWidget * widget, Node * node)
     {
-        QLine line{widget->current_node->point_out, node->point_in};
+        QLine line{widget->current_node->current_port_out->pos, node->current_port_in->pos};
+        //erase line painted on canvas
         auto it = std::find(widget->lines.begin(), widget->lines.end(), line);
         if (it != widget->lines.end()) { widget->lines.erase(it); }
-        auto it2 = std::find(widget->current_node->nodes_out.begin(), widget->current_node->nodes_out.end(), node);
-        if (it2 != widget->current_node->nodes_out.end()) { widget->current_node->nodes_out.erase(it2); }
-        auto it3 = std::find( node->nodes_in.begin(), node->nodes_in.end(), widget->current_node);
-        if (it3 != node->nodes_in.end()) { node->nodes_in.erase(it3); }
-        auto it4 = std::find( widget->edges.begin(), widget->edges.end(), QPair<Node*, Node*>{widget->current_node, node});
+
+        //erase edge
+        auto it4 = std::find( widget->edges.begin(), widget->edges.end(), DragWidget::Edge{widget->current_node->current_port_out, node->current_port_in});
         if (it4 != widget->edges.end()) { widget->edges.erase(it4); }
+
+        //erase ports connected to node
+        auto it5 = std::find( node->current_port_in->connected_ports.begin(),
+                              node->current_port_in->connected_ports.end(),
+                              widget->current_node->current_port_out);
+        if (it5 != node->current_port_in->connected_ports.end()) { node->current_port_in->connected_ports.erase(it5); }
+
+        //erase ports connected from node
+        auto it6 = std::find( widget->current_node->current_port_out->connected_ports.begin(),
+                              widget->current_node->current_port_out->connected_ports.end(),
+                              node->current_port_in);
+        if (it6 != widget->current_node->current_port_out->connected_ports.end()) { widget->current_node->current_port_out->connected_ports.erase(it6); }
     }
 }
 
@@ -95,7 +106,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
 
     if(is_connecting || is_disconnecting)
     {
-        line_begin = current_node->point_out;
+        line_begin = current_node->current_port_out->pos;
         is_drawing = true;
     }
     else
@@ -180,7 +191,7 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
             {
                 if(is_connecting)
                 {
-                    if(!connect_nodes(current_node, node))
+                    if(!connect_ports(current_node->current_port_out, node->current_port_in))
                     {
                         line_end = line_begin;
                     }
@@ -239,7 +250,7 @@ void DragWidget::set_lines()
     lines.clear();
     for(const auto & edge : edges)
     {
-        QLine line{ edge.first->point_out, edge.second->point_in };
+        QLine line{ edge.first->pos, edge.second->pos };
         lines.push_back(line);
     }
 }
@@ -259,7 +270,7 @@ void DragWidget::delete_node(DragWidget *source)
 {
     auto obj = source->current_node;
     auto it = std::find(source->node_list.begin(), source->node_list.end(), obj);
-    if (it != source->node_list.end() && obj->nodes_in.empty() && obj->nodes_out.empty())
+    if (it != source->node_list.end() && obj->current_port_in->connected_ports.isEmpty() && obj->current_port_out->connected_ports.isEmpty())
     {
         source->node_list.erase(it);
         delete obj;
@@ -291,15 +302,15 @@ void DragWidget::start_node_movement(QMouseEvent *event)
     }
 }
 
-bool DragWidget::connect_nodes(Node *first, Node *second)
+bool DragWidget::connect_ports(Port *first, Port *second)
 {
-    line_end = second->point_in;
-    auto it = std::find( edges.begin(), edges.end(), QPair<Node*, Node*>{first, second});
+    line_end = second->pos;
+    auto it = std::find( edges.begin(), edges.end(), Edge{first, second});
     if (it == edges.end())
     {
-        if(first->connect_node(second))
+        if(first->node->connect_port(second))
         {
-            edges.push_back(QPair<Node*, Node*>{first, second});
+            edges.push_back(Edge{first, second});
             set_lines();
             return true;
         }
@@ -310,5 +321,3 @@ bool DragWidget::connect_nodes(Node *first, Node *second)
     }
     return false;
 }
-
-

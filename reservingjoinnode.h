@@ -12,10 +12,13 @@ public:
                            unsigned int n = 0);
     explicit ReservingJoinNode(QWidget *parent, bool);
 
+//    void set_point_in() override;
 
-    bool connect_node(Node * node) override;
-    bool connect_from_out(Node *node) override;
-    bool connect_to_in(Node *node) override;
+protected:
+    QVector<QPoint> ports;
+    int current_port = 0;
+    const unsigned int no_of_ports = 4;
+    void set_ports();
 
 };
 

@@ -18,18 +18,18 @@ SourceNode::SourceNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/s
     setAttribute(Qt::WA_DeleteOnClose);
 }
 
-bool SourceNode::connect_node(Node * node)
+bool SourceNode::connect_port(Port * port)
 {
-    return Node::connect_node(node);
+    return Node::connect_port(port);
 }
 
-bool SourceNode::connect_from_out(Node *node)
+bool SourceNode::connect_from_out(Port * port)
 {
-    nodes_out.push_back(node);
-    return true;
+    return Node::connect_from_out(port);
 }
 
-bool SourceNode::connect_to_in(Node *)
+bool SourceNode::connect_to_in(Port * port)
 {
+    port->connected_ports.pop_back();
     return false;
 }

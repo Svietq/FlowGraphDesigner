@@ -19,26 +19,25 @@ ContinuousNode::ContinuousNode(QWidget *parent, bool) :  Node{parent, QPixmap{":
 }
 
 
-bool ContinuousNode::connect_node(Node * node)
+bool ContinuousNode::connect_port(Port * port)
 {
-    return Node::connect_node(node);
+    return Node::connect_port(port);
 }
 
-bool ContinuousNode::connect_from_out(Node *node)
+bool ContinuousNode::connect_from_out(Port * port)
 {
-    nodes_out.push_back(node);
-    return true;
+    return Node::connect_from_out(port);
 }
 
-bool ContinuousNode::connect_to_in(Node *node)
+bool ContinuousNode::connect_to_in(Port * port)
 {
-    if(nodes_in.isEmpty())
+    if(current_port_in->connected_ports.isEmpty())
     {
-        nodes_in.push_back(node);
-        return true;
+        return Node::connect_to_in(port);
     }
     else
     {
+        port->connected_ports.pop_back();
         return false;
     }
 }

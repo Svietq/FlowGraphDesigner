@@ -31,7 +31,8 @@ SOURCES += \
     sourcenode.cpp \
     continuousnode.cpp \
     functionnode.cpp \
-    reservingjoinnode.cpp
+    reservingjoinnode.cpp \
+    port.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
     sourcenode.h \
     continuousnode.h \
     functionnode.h \
-    reservingjoinnode.h
+    reservingjoinnode.h \
+    port.h
 
 FORMS += \
         mainwindow.ui

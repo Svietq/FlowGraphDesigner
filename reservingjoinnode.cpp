@@ -4,7 +4,8 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, const QPoint &p, unsigned 
 {
     type = Type::ReservingJoin;
     setPixmap(QPixmap{":/icons/reserving_join.png"});
-    set_point_in();
+//    set_ports();
+    Node::set_point_in();
     set_point_out();
     show();
     setAttribute(Qt::WA_DeleteOnClose);
@@ -18,18 +19,25 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, bool) :  Node{parent, QPix
     setAttribute(Qt::WA_DeleteOnClose);
 }
 
+//void ReservingJoinNode::set_point_in()
+//{
+//    if(current_port < ports.size())
+//    {
+//        point_in = ports[current_port++];
+//    }
+//}
 
-bool ReservingJoinNode::connect_node(Node * node)
+void ReservingJoinNode::set_ports()
 {
-    return Node::connect_node(node);
+    ports.resize(no_of_ports);
+    int h = pixmap()->height()/no_of_ports;
+    for(auto & port : ports)
+    {
+        port = this->pos() + QPoint{ 0, h };
+        h += pixmap()->height()/no_of_ports;
+    }
 }
 
-bool ReservingJoinNode::connect_from_out(Node *node)
-{
-    return Node::connect_from_out(node);
-}
 
-bool ReservingJoinNode::connect_to_in(Node *node)
-{
-    return Node::connect_to_in(node);
-}
+
+

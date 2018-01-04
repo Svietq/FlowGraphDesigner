@@ -24,7 +24,8 @@ public:
     bool is_connecting = false;
     bool is_disconnecting = false;
     QVector<QLine> lines;
-    QVector< QPair<Node*, Node*> > edges;
+    using Edge = QPair<Port*, Port*>;
+    QVector<Edge> edges;
 
     QString node_ids;
 
@@ -53,6 +54,7 @@ protected:
     void delete_node(DragWidget* source);
     void start_node_movement(QMouseEvent *event);
     bool connect_nodes(Node * first, Node * second);
+    bool connect_ports(Port *first, Port *second);
 
 signals:
     void close_dock_widget();

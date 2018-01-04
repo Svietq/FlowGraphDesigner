@@ -2,6 +2,7 @@
 #define NODE_H
 
 #include <QLabel>
+#include "port.h"
 
 class Node : public QLabel
 {
@@ -16,19 +17,19 @@ public:
     static Node* create(Type type, QWidget *parent, bool);
 
     unsigned int id = 0;
-    QPoint point_in;
-    QPoint point_out;
 
-    QVector<Node*> nodes_in;
-    QVector<Node*> nodes_out;
+    QVector<Port> ports_in;
+    QVector<Port> ports_out;
+    Port* current_port_in;
+    Port* current_port_out;
 
-    void set_point_in();
-    void set_point_out();
+    virtual void set_point_in();
+    virtual void set_point_out();
 
     void move_node(const QPoint &pos);
-    virtual bool connect_node(Node * node);
-    virtual bool connect_from_out(Node * node);
-    virtual bool connect_to_in(Node * node);
+    virtual bool connect_port(Port * port);
+    virtual bool connect_from_out(Port * port);
+    virtual bool connect_to_in(Port * port);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
