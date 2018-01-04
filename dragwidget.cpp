@@ -37,6 +37,8 @@ namespace
 
     void delete_line(DragWidget * widget, Node * node)
     {
+        emit widget->deleted_line();
+
         QLine line{widget->current_node->current_port_out->pos, node->current_port_in->pos};
         //erase line painted on canvas
         auto it = std::find(widget->lines.begin(), widget->lines.end(), line);
@@ -304,6 +306,7 @@ void DragWidget::start_node_movement(QMouseEvent *event)
 
 bool DragWidget::connect_ports(Port *first, Port *second)
 {
+    if(!first || !second) { return false; }
     line_end = second->pos;
     auto it = std::find( edges.begin(), edges.end(), Edge{first, second});
     if (it == edges.end())

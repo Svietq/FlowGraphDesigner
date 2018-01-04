@@ -58,6 +58,7 @@ protected:
 
 signals:
     void close_dock_widget();
+    void deleted_line();
 
 
 };

@@ -17,7 +17,6 @@ public:
 
     void set_node_id(std::size_t id);
 
-private:
     Ui::MainWindow *ui;
 
 public slots:

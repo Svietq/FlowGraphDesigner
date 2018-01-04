@@ -63,11 +63,11 @@ void Node::move_node(const QPoint & pos)
     set_point_in();
     set_point_out();
     raise();
-
 }
 
 bool Node::connect_port(Port *port)
 {
+    if(!port) return false;
     if(!connect_from_out(port)){ return false; }
     if(!port->node->connect_to_in(this->current_port_out)){ return false; }
     return true;
@@ -75,14 +75,28 @@ bool Node::connect_port(Port *port)
 
 bool Node::connect_from_out(Port *port)
 {
-    current_port_out->connected_ports.push_back(port);
-    return true;
+    if(current_port_out < ports_out.end())
+    {
+        current_port_out->connected_ports.push_back(port);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool Node::connect_to_in(Port *port)
 {
-    current_port_in->connected_ports.push_back(port);
-    return true;
+    if(current_port_in < ports_in.end())
+    {
+        current_port_in->connected_ports.push_back(port);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Node::mouseDoubleClickEvent(QMouseEvent *)
