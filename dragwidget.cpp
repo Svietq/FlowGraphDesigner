@@ -111,6 +111,7 @@ void DragWidget::generate_code()
 {
     qDebug() << "DragWidget::generate_code";
     CodeGenerator gen{"/home/michal/Dokumenty/inzynierka/test/test.txt", node_list, edges};
+    gen.generate();
 }
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event)
