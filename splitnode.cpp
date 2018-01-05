@@ -29,11 +29,11 @@ SplitNode::SplitNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/spl
 
 void SplitNode::set_point_out()
 {
-    int h = pixmap()->height()/no_of_ports;
+    int h = pixmap()->height()/(no_of_ports+1);
     for(auto & port : ports_out)
     {
         port.pos = this->pos() + QPoint{ pixmap()->width(), h };
-        h += pixmap()->height()/no_of_ports;
+        h += pixmap()->height()/(no_of_ports+1);
     }
 }
 

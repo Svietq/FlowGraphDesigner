@@ -29,11 +29,11 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, bool) :  Node{parent, QPix
 
 void ReservingJoinNode::set_point_in()
 {
-    int h = pixmap()->height()/no_of_ports;
+    int h = pixmap()->height()/(no_of_ports+1);
     for(auto & port : ports_in)
     {
         port.pos = this->pos() + QPoint{ 0, h };
-        h += pixmap()->height()/no_of_ports;
+        h += pixmap()->height()/(no_of_ports+1);
     }
 }
 
