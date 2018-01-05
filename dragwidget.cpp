@@ -37,57 +37,52 @@ namespace
         return data;
     }
 
-    void find_connection(DragWidget * widget, Node * node)
+    std::pair<Port*&, Port*&> find_connection(DragWidget * widget, Node * node)
     {
         if(widget->current_node->type == Node::Type::Split && node->type == Node::Type::ReservingJoin)
         {
-            auto it = std::find(widget->current_node->last_port_out->connected_ports.begin(),
-                               widget->current_node->last_port_out->connected_ports.end(),
-                               node->last_port_in);
-            if (it != widget->current_node->last_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+            return std::pair<Port*&,Port*&>{widget->current_node->last_port_out, node->last_port_in};
         }
         else if(widget->current_node->type == Node::Type::Split)
         {
-            auto it =std::find(widget->current_node->last_port_out->connected_ports.begin(),
-                               widget->current_node->last_port_out->connected_ports.end(),
-                               node->current_port_in);
-            if (it != widget->current_node->last_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+            return std::pair<Port*&,Port*&>{widget->current_node->last_port_out, node->current_port_in};
         }
         else if(node->type == Node::Type::ReservingJoin)
         {
-            auto it = std::find(widget->current_node->current_port_out->connected_ports.begin(),
-                               widget->current_node->current_port_out->connected_ports.end(),
-                               node->last_port_in);
-            if (it != widget->current_node->current_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+            return std::pair<Port*&,Port*&>{widget->current_node->current_port_out, node->last_port_in};
+        }
+        else
+        {
+            return std::pair<Port*&,Port*&>{widget->current_node->current_port_out, node->current_port_in};
         }
     }
 
     void delete_line(DragWidget * widget, Node * node)
     {
-        find_connection(widget, node);
+        auto [out, in] = find_connection(widget, node);
 
-        if(!node->current_port_in || !widget->current_node->current_port_out) { return; }
+        auto it1 = std::find(out->connected_ports.begin(), out->connected_ports.end(), in);
+
+        if (it1 != out->connected_ports.end()) { emit widget->deleted_line(); }
+
+        if(!in || !out) { return; }
 
         //erase line painted on canvas
-        QLine line{widget->current_node->current_port_out->pos, node->current_port_in->pos};
+        QLine line{out->pos, in->pos};
         auto it = std::find(widget->lines.begin(), widget->lines.end(), line);
         if (it != widget->lines.end()) { widget->lines.erase(it); }
 
         //erase edge
-        auto it4 = std::find( widget->edges.begin(), widget->edges.end(), DragWidget::Edge{widget->current_node->current_port_out, node->current_port_in});
+        auto it4 = std::find( widget->edges.begin(), widget->edges.end(), DragWidget::Edge{out, in});
         if (it4 != widget->edges.end()) { widget->edges.erase(it4); }
 
         //erase ports connected to node
-        auto it5 = std::find( node->current_port_in->connected_ports.begin(),
-                              node->current_port_in->connected_ports.end(),
-                              widget->current_node->current_port_out);
-        if (it5 != node->current_port_in->connected_ports.end()) { node->current_port_in->connected_ports.erase(it5); }
+        auto it5 = std::find( in->connected_ports.begin(), in->connected_ports.end(), out);
+        if (it5 != in->connected_ports.end()) { in->connected_ports.erase(it5); }
 
         //erase ports connected from node
-        auto it6 = std::find( widget->current_node->current_port_out->connected_ports.begin(),
-                              widget->current_node->current_port_out->connected_ports.end(),
-                              node->current_port_in);
-        if (it6 != widget->current_node->current_port_out->connected_ports.end()) { widget->current_node->current_port_out->connected_ports.erase(it6); }
+        auto it6 = std::find( out->connected_ports.begin(), out->connected_ports.end(), in);
+        if (it6 != out->connected_ports.end()) { out->connected_ports.erase(it6); }
 
     }
 }
