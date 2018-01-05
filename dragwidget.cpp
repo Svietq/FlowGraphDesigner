@@ -37,23 +37,23 @@ namespace
         return data;
     }
 
-    std::pair<Port*&, Port*&> find_connection(DragWidget * widget, Node * node)
+    std::pair<Port*, Port*> find_connection(DragWidget * widget, Node * node)
     {
         if(widget->current_node->type == Node::Type::Split && node->type == Node::Type::ReservingJoin)
         {
-            return std::pair<Port*&,Port*&>{widget->current_node->last_port_out, node->last_port_in};
+            return std::pair<Port*,Port*>{widget->current_node->last_port_out, node->last_port_in};
         }
         else if(widget->current_node->type == Node::Type::Split)
         {
-            return std::pair<Port*&,Port*&>{widget->current_node->last_port_out, node->current_port_in};
+            return std::pair<Port*,Port*>{widget->current_node->last_port_out, node->current_port_in};
         }
         else if(node->type == Node::Type::ReservingJoin)
         {
-            return std::pair<Port*&,Port*&>{widget->current_node->current_port_out, node->last_port_in};
+            return std::pair<Port*,Port*>{widget->current_node->current_port_out, node->last_port_in};
         }
         else
         {
-            return std::pair<Port*&,Port*&>{widget->current_node->current_port_out, node->current_port_in};
+            return std::pair<Port*,Port*>{widget->current_node->current_port_out, node->current_port_in};
         }
     }
 
@@ -62,8 +62,17 @@ namespace
         auto [out, in] = find_connection(widget, node);
 
         auto it1 = std::find(out->connected_ports.begin(), out->connected_ports.end(), in);
-
-        if (it1 != out->connected_ports.end()) { emit widget->deleted_line(); }
+        if (it1 != out->connected_ports.end())
+        {
+            if(widget->current_node->type == Node::Type::Split)
+            {
+                widget->current_node->set_ports();
+            }
+            if( node->type == Node::Type::ReservingJoin)
+            {
+                node->set_ports();
+            }
+        }
 
         if(!in || !out) { return; }
 

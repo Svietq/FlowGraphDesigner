@@ -33,6 +33,8 @@ public:
     virtual bool connect_from_out(Port * port);
     virtual bool connect_to_in(Port * port);
 
+    void set_ports();
+
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
 
@@ -44,8 +46,8 @@ protected:
 signals:
     void node_double_clicked();
 
-private slots:
-    void set_ports();
+//private slots:
+//    void set_ports();
 };
 
 #endif // NODE_H
