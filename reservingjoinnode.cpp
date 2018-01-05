@@ -17,15 +17,10 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, const QPoint &p, unsigned 
     set_point_out();
     show();
     setAttribute(Qt::WA_DeleteOnClose);
-//    qDebug() << ports_in.size();
-    const auto &top = static_cast<MainWindow*>(this->window());
-    QObject::connect(top->ui->canvas, &DragWidget::deleted_line, this, &ReservingJoinNode::set_current_port_in);
-
 }
 
 ReservingJoinNode::ReservingJoinNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/reserving_join.png"}, true}
 {
-//    ports_in.append({Port{this}, Port{this}, Port{this} });
     type = Type::ReservingJoin;
     move(35, 10);
     show();
@@ -66,16 +61,11 @@ bool ReservingJoinNode::connect_from_out(Port *port)
 
 bool ReservingJoinNode::connect_to_in(Port *port)
 {
-//    while(!current_port_in->connected_ports.isEmpty() && (current_port_in < &ports_in.back()) )
-//    {
-//        current_port_in++;
-//    }
-
     if(current_port_in < ports_in.end())
     {
         bool val = Node::connect_to_in(port);
-        current_port_in++;
-        if(current_port_in == ports_in.end()) { current_port_in = nullptr; }
+        inc_curr_port(current_port_in, ports_in);
+        inc_last_port(last_port_in, ports_in);
         return val;
     }
     else

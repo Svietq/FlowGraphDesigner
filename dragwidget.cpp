@@ -12,10 +12,12 @@ namespace
             Node::create(Node::Type::Source, parent, true);
             Node::create(Node::Type::Continuous, parent, true);
             Node::create(Node::Type::Function, parent, true);
+
         }
         else if(type == DragWidget::Type::MenuJoinSplit)
         {
             Node::create(Node::Type::ReservingJoin, parent, true);
+            Node::create(Node::Type::Split, parent, true);
         }
     }
 
@@ -35,21 +37,39 @@ namespace
         return data;
     }
 
+    void find_connection(DragWidget * widget, Node * node)
+    {
+        if(widget->current_node->type == Node::Type::Split && node->type == Node::Type::ReservingJoin)
+        {
+            auto it = std::find(widget->current_node->last_port_out->connected_ports.begin(),
+                               widget->current_node->last_port_out->connected_ports.end(),
+                               node->last_port_in);
+            if (it != widget->current_node->last_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+        }
+        else if(widget->current_node->type == Node::Type::Split)
+        {
+            auto it =std::find(widget->current_node->last_port_out->connected_ports.begin(),
+                               widget->current_node->last_port_out->connected_ports.end(),
+                               node->current_port_in);
+            if (it != widget->current_node->last_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+        }
+        else if(node->type == Node::Type::ReservingJoin)
+        {
+            auto it = std::find(widget->current_node->current_port_out->connected_ports.begin(),
+                               widget->current_node->current_port_out->connected_ports.end(),
+                               node->last_port_in);
+            if (it != widget->current_node->current_port_out->connected_ports.end()) { emit widget->deleted_line(); }
+        }
+    }
+
     void delete_line(DragWidget * widget, Node * node)
     {
-        auto ptr = node->current_port_in ? --node->current_port_in :  &node->ports_in.back();
-        if(ptr != &node->ports_in.back()){ ++node->current_port_in; }
+        find_connection(widget, node);
 
-        auto it1 = std::find(widget->current_node->current_port_out->connected_ports.begin(),
-                             widget->current_node->current_port_out->connected_ports.end(),
-                             ptr);
+        if(!node->current_port_in || !widget->current_node->current_port_out) { return; }
 
-        if (it1 != widget->current_node->current_port_out->connected_ports.end()) { emit widget->deleted_line(); }
-
-        if(!node->current_port_in) { return; }
-
-        QLine line{widget->current_node->current_port_out->pos, node->current_port_in->pos};
         //erase line painted on canvas
+        QLine line{widget->current_node->current_port_out->pos, node->current_port_in->pos};
         auto it = std::find(widget->lines.begin(), widget->lines.end(), line);
         if (it != widget->lines.end()) { widget->lines.erase(it); }
 
@@ -116,9 +136,26 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    if(is_connecting || is_disconnecting)
+    if(is_connecting)
     {
-        line_begin = current_node->current_port_out->pos;
+        if(current_node->current_port_out)
+        {
+            line_begin = current_node->current_port_out->pos;
+        }
+
+        is_drawing = true;
+    }
+    else if(is_disconnecting)
+    {
+        if(current_node->last_port_out)
+        {
+            line_begin = current_node->last_port_out->pos;
+        }
+        else
+        {
+            line_begin = current_node->current_port_out->pos;
+        }
+
         is_drawing = true;
     }
     else

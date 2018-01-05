@@ -12,7 +12,7 @@ public:
     explicit Node(QWidget *parent, const QPixmap & map, bool) :  QLabel{parent} { setPixmap(map); }
     explicit Node(QWidget *parent, bool) :  QLabel{parent} { }
 
-    enum class Type {Source, Continuous, Function, ReservingJoin} type;
+    enum class Type {Source, Continuous, Function, ReservingJoin, Split} type;
     static Node* create(Type type, QWidget *parent, const QPoint &p, unsigned int n);
     static Node* create(Type type, QWidget *parent, bool);
 
@@ -20,8 +20,10 @@ public:
 
     QVector<Port> ports_in;
     QVector<Port> ports_out;
-    Port* current_port_in;
-    Port* current_port_out;
+    Port * current_port_in;
+    Port * current_port_out;
+    Port * last_port_out = nullptr;
+    Port * last_port_in  = nullptr;
 
     virtual void set_point_in();
     virtual void set_point_out();
@@ -34,8 +36,16 @@ public:
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
 
+    void inc_last_port(Port *&last_port, QVector<Port> &ports);
+    void dec_last_port(Port *&last_port, QVector<Port> & ports);
+    void inc_curr_port(Port *&curr_port, QVector<Port> &ports);
+    void dec_curr_port(Port *&curr_port, QVector<Port> & ports);
+
 signals:
     void node_double_clicked();
+
+private slots:
+    void set_ports();
 };
 
 #endif // NODE_H
