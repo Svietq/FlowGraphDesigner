@@ -12,6 +12,8 @@ class CodeGenerator
     QFile file_h;
     QVector<Node*> nodes;
     QVector<DragWidget::Edge> edges;
+    QVector<Node*> source_nodes;
+
 public:
     CodeGenerator(const QString &name, const QString &idir, const QVector<Node*> & inodes, const QVector<DragWidget::Edge> & iedges);
     ~CodeGenerator();
@@ -22,6 +24,7 @@ private:
     void write_begin();
     void write_nodes();
     void write_edges();
+    void write_source_activate();
     void write_end();
 
     void write_node(Node *node);

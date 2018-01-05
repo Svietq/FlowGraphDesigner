@@ -19,6 +19,7 @@ void CodeGenerator::generate()
     write_begin();
     write_nodes();
     write_edges();
+    write_source_activate();
     write_end();
 }
 
@@ -57,6 +58,7 @@ void CodeGenerator::write_nodes()
     {
         qDebug() << "CodeGenerator::write_nodes - 1";
         write_node(node);
+        if(node->type == Node::Type::Source) { source_nodes.push_back(node); }
     }
 }
 
@@ -71,6 +73,17 @@ void CodeGenerator::write_edges()
         stream_cpp << ", ";
         write_port(edge.second, stream_cpp);
         stream_cpp << ");" << '\n';
+    }
+}
+
+void CodeGenerator::write_source_activate()
+{
+    //write to .cpp file:
+    QTextStream stream_cpp( &file_cpp );
+    for(const auto & source : source_nodes)
+    {
+        QString id = QString::number(source->id);
+        stream_cpp << "     source_node_" << id << ".activate();" << '\n';
     }
 }
 
@@ -243,7 +256,6 @@ void CodeGenerator::write_function_port(Port *port, QTextStream &stream_cpp)
 void CodeGenerator::write_reserving_join_port(Port *port, QTextStream & stream_cpp)
 {
     QString node_id = QString::number(port->node->id);
-//    QString port_id = QString::number(std::distance(port->node->ports_in.begin(), port));
     QString port_id = QString::number(port->id);
     //write to .cpp file:
     stream_cpp << "input_port< " << port_id << " >( join_node_" << node_id << " )";
@@ -252,7 +264,6 @@ void CodeGenerator::write_reserving_join_port(Port *port, QTextStream & stream_c
 void CodeGenerator::write_split_port(Port *port, QTextStream &stream_cpp)
 {
     QString node_id = QString::number(port->node->id);
-//    QString port_id = QString::number(std::distance(port->node->ports_out.begin(), port));
     QString port_id = QString::number(port->id);
     //write to .cpp file:
     stream_cpp << "output_port< " << port_id << " >( split_node_" << node_id << " )";

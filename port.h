@@ -3,7 +3,7 @@
 
 #include <QPoint>
 #include <QVector>
-//#include "node.h"
+
 class Node;
 
 class Port
