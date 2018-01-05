@@ -46,8 +46,6 @@ protected:
 signals:
     void node_double_clicked();
 
-//private slots:
-//    void set_ports();
 };
 
 #endif // NODE_H

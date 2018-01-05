@@ -11,8 +11,8 @@
 
 Node::Node(QWidget *parent, const QPoint &p, unsigned int n) : QLabel{parent}, id{n}
 {
-    ports_in.push_back(Port{this});
-    ports_out.push_back(Port{this});
+    ports_in.push_back(Port{this, 0});
+    ports_out.push_back(Port{this, 0});
     current_port_in = &ports_in[0];
     current_port_out = &ports_out[0];
     move(p);

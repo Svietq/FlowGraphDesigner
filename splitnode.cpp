@@ -6,9 +6,9 @@
 
 SplitNode::SplitNode(QWidget *parent, const QPoint &p, unsigned int n) : Node{parent, p, n}
 {
-    ports_out.push_back(Port{this});
-    ports_out.push_back(Port{this});
-    ports_out.push_back(Port{this});
+    ports_out.push_back(Port{this, 1});
+    ports_out.push_back(Port{this, 2});
+    ports_out.push_back(Port{this, 3});
     current_port_in = &ports_in[0];
     current_port_out = &ports_out[0];
     type = Type::Split;

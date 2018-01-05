@@ -31,6 +31,13 @@ private:
     void write_reserving_join_node(Node *node);
     void write_split_node(Node *node);
 
+    void write_port(Port * port, QTextStream & stream_cpp);
+    void write_source_port(Port * port, QTextStream & stream_cpp);
+    void write_continuous_port(Port * port, QTextStream & stream_cpp);
+    void write_function_port(Port * port, QTextStream & stream_cpp);
+    void write_reserving_join_port(Port * port, QTextStream & stream_cpp);
+    void write_split_port(Port * port, QTextStream & stream_cpp);
+
 };
 
 #endif // CODEGENERATOR_H
