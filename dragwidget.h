@@ -26,8 +26,9 @@ public:
     QVector<QLine> lines;
     using Edge = QPair<Port*, Port*>;
     QVector<Edge> edges;
-
     QString node_ids;
+
+    void generate_code();
 
 protected:
     const QString mime_format = "application/x-dnditemdata";

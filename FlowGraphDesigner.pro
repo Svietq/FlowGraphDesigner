@@ -34,7 +34,8 @@ SOURCES += \
     functionnode.cpp \
     reservingjoinnode.cpp \
     port.cpp \
-    splitnode.cpp
+    splitnode.cpp \
+    codegenerator.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     functionnode.h \
     reservingjoinnode.h \
     port.h \
-    splitnode.h
+    splitnode.h \
+    codegenerator.h
 
 FORMS += \
         mainwindow.ui
