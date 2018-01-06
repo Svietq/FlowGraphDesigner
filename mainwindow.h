@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDialog>
+#include "filemanager.h"
 
 namespace Ui {
 class MainWindow;
@@ -35,7 +35,7 @@ private slots:
     void on_toolButton_2_clicked();
 
 private:
-    QDialog pop_up{this};
+    FileManager pop_up{this};
     void set_pop_up();
 };
 

@@ -1,10 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dragwidget.h"
-#include <QTreeWidget>
-#include <QLineEdit>
-#include <QPushButton>
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect( this, &MainWindow::connect_button_not_toggled, [this](){ this->ui->canvas->is_connecting = false; });
     QObject::connect( this, &MainWindow::disconnect_button_toggled, [this](){ this->ui->canvas->is_disconnecting = true; });
     QObject::connect( this, &MainWindow::disconnect_button_not_toggled, [this](){ this->ui->canvas->is_disconnecting = false; });
-    set_pop_up();
+
 }
 
 MainWindow::~MainWindow()
@@ -71,20 +67,6 @@ void MainWindow::on_toolButton_2_clicked()
 
 }
 
-void MainWindow::set_pop_up()
-{
-    QHBoxLayout *horizontal_layout = new QHBoxLayout();
-    QVBoxLayout *vertical_layout = new QVBoxLayout(&pop_up);
-
-    horizontal_layout->addWidget(new QLineEdit("Enter project name here..."));
-    horizontal_layout->addWidget(new QPushButton("OK"));
-    QTreeWidget * file_explorer = new QTreeWidget();
-    vertical_layout->addWidget(file_explorer );
-    vertical_layout->addLayout(horizontal_layout);
-    pop_up.setMinimumSize(500, 300);
-
-
-}
 
 
 

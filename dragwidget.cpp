@@ -107,10 +107,10 @@ DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype
     }
 }
 
-void DragWidget::generate_code(const QString &dir)
+void DragWidget::generate_code(const QString & name, const QString &dir)
 {
     qDebug() << "DragWidget::generate_code";
-    CodeGenerator gen{"test", "/home/michal/Dokumenty/inzynierka/test/", node_list, edges};
+    CodeGenerator gen{name, dir, node_list, edges};
     gen.generate();
 }
 

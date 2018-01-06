@@ -28,7 +28,7 @@ public:
     QVector<Edge> edges;
     QString node_ids;
 
-    void generate_code(const QString &dir);
+    void generate_code(const QString &name, const QString &dir);
 
 protected:
     const QString mime_format = "application/x-dnditemdata";
