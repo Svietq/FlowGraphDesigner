@@ -125,7 +125,17 @@ void CodeGenerator::write_source_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     source_node< int > source_node_" << id << "(graph_g0, source_node_" << id << "_body(), false ); " << '\n';
+    stream_cpp << "     source_node< int > source_node_" << id << "(graph_g0, " ;
+
+    if(node->function == "" )
+    {
+        stream_cpp << "source_node_" << id << "_body()";
+    }
+    else
+    {
+        stream_cpp << node->function;
+    }
+    stream_cpp << ", false ); " << '\n';
 
     //write to .h file:
     QTextStream stream_h( &file_h );
@@ -152,7 +162,17 @@ void CodeGenerator::write_continuous_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     continuous_node< int, int > continous_node_" << id << "(graph_g0, 1, continous_node_" << id << "_body() ); \\\\??" << '\n';
+    stream_cpp << "     continuous_node< int, int > continous_node_" << id << "(graph_g0, 1, ";
+
+    if(node->function == "")
+    {
+        stream_cpp << " continous_node_" << id << "_body()";
+    }
+    else
+    {
+        stream_cpp << node->function;
+    }
+    stream_cpp << " ); " << '\n';
 
     //write to .h file:
     QTextStream stream_h( &file_h );
@@ -174,7 +194,17 @@ void CodeGenerator::write_function_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     function_node< int, int > function_node_" << id << "(graph_g0, 1, function_node_" << id << "_body() ); " << '\n';
+    stream_cpp << "     function_node< int, int > function_node_" << id << "(graph_g0, 1, ";
+
+    if(node->function == "")
+    {
+        stream_cpp << "function_node_" << id << "_body()";
+    }
+    else
+    {
+        stream_cpp << node->function;
+    }
+    stream_cpp << " ); " << '\n';
 
     //write to .h file:
     QTextStream stream_h( &file_h );
