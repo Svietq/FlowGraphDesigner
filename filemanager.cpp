@@ -18,4 +18,12 @@ FileManager::FileManager(QWidget *parent) : QDialog{parent}
     model->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
     file_explorer->setModel(model);
 
+    QObject::connect(file_explorer, &QTreeView::clicked, this, &FileManager::set_dir);
+
+}
+
+void FileManager::set_dir(const QModelIndex &index)
+{
+    dir = model->fileInfo(index).absolutePath();
+    line_edit->setText(dir);
 }
