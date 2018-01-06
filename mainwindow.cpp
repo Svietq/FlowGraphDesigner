@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect( this, &MainWindow::connect_button_not_toggled, [this](){ this->ui->canvas->is_connecting = false; });
     QObject::connect( this, &MainWindow::disconnect_button_toggled, [this](){ this->ui->canvas->is_disconnecting = true; });
     QObject::connect( this, &MainWindow::disconnect_button_not_toggled, [this](){ this->ui->canvas->is_disconnecting = false; });
+    QObject::connect( &pop_up, &FileManager::ok_button_pressed, [this](){ ui->canvas->generate_code(pop_up.get_name(), pop_up.get_dir()); } );
 
 }
 
@@ -61,10 +62,7 @@ void MainWindow::on_toolButton_3_toggled(bool checked)
 
 void MainWindow::on_toolButton_2_clicked()
 {
-//    ui->canvas->generate_code();
-
     pop_up.show();
-
 }
 
 

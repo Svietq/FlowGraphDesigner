@@ -36,7 +36,6 @@ private slots:
 
 private:
     FileManager pop_up{this};
-    void set_pop_up();
 };
 
 #endif // MAINWINDOW_H

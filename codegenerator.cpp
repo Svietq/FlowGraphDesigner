@@ -53,10 +53,8 @@ void CodeGenerator::write_begin()
 
 void CodeGenerator::write_nodes()
 {
-    qDebug() << "CodeGenerator::write_nodes";
     for(const auto & node : nodes)
     {
-        qDebug() << "CodeGenerator::write_nodes - 1";
         write_node(node);
         if(node->type == Node::Type::Source) { source_nodes.push_back(node); }
     }
