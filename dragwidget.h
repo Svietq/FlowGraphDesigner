@@ -41,6 +41,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *) override;
 
+
     QPainter painter;
     QPoint line_begin{};
     QPoint line_end{};

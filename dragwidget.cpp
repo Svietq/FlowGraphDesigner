@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 #include "codegenerator.h"
+#include "ui_mainwindow.h"
 
 namespace
 {
@@ -141,6 +142,17 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
+    if(event->button() == Qt::RightButton)
+    {
+        const auto &top = static_cast<MainWindow*>(this->window());
+        top->ui->toolButton_3->setChecked(false);
+        top->ui->toolButton_4->setChecked(false);
+        emit top->connect_button_not_toggled();
+        emit top->disconnect_button_not_toggled();
+
+        return;
+    }
+
     current_node = static_cast<Node*>(childAt(event->pos()));
     if (!current_node)
     {
