@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/node.png</file>
         <file>icons/continue.png</file>
         <file>icons/function.png</file>
         <file>icons/reserving_join.png</file>
