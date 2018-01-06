@@ -7,8 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::MenuComputational), "Computational");
-    ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::MenuJoinSplit), "Join/split");
+    ui->tabWidget->addItem(new DragWidget(nullptr, DragWidget::Type::MenuComputational), "Computational");
+    ui->tabWidget->addItem(new DragWidget(nullptr, DragWidget::Type::MenuJoinSplit), "Join/split");
     ui->frame->hide();
     QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ ui->frame->hide(); } );
     QObject::connect( this, &MainWindow::connect_button_toggled, [this](){ this->ui->canvas->is_connecting = true; });
