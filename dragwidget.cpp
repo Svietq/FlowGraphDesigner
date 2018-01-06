@@ -275,7 +275,7 @@ void DragWidget::mouseReleaseEvent(QMouseEvent *event)
 void DragWidget::paintEvent(QPaintEvent *)
 {
     painter.begin(this);
-    painter.setPen(QPen(Qt::black, 5, Qt::SolidLine));
+    painter.setPen(QPen(Qt::darkCyan, 2, Qt::SolidLine));
 
     if(is_connecting)
     {
@@ -289,7 +289,7 @@ void DragWidget::paintEvent(QPaintEvent *)
     else if(is_disconnecting)
     {
         painter.drawLines(lines);
-        painter.setPen(QPen(Qt::red, 5, Qt::SolidLine));
+        painter.setPen(QPen(Qt::red, 2, Qt::SolidLine));
         current_line = QLine{line_begin, line_end};
         if(line_begin != line_end  && line_begin != QPoint{})
         {
