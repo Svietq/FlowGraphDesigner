@@ -13,7 +13,7 @@ FunctionNode::FunctionNode(QWidget *parent, const QPoint &p, unsigned int n) : N
 FunctionNode::FunctionNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/function.png"}, true}
 {
     type = Type::Function;
-    move(15, 230);
+    move(35, 230);
     show();
     setAttribute(Qt::WA_DeleteOnClose);
 }

@@ -22,7 +22,7 @@ SplitNode::SplitNode(QWidget *parent, const QPoint &p, unsigned int n) : Node{pa
 SplitNode::SplitNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/split.png"}, true}
 {
     type = Type::Split;
-    move(35, 130);
+    move(40, 130);
     show();
     setAttribute(Qt::WA_DeleteOnClose);
 }

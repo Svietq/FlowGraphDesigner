@@ -13,7 +13,7 @@ ContinuousNode::ContinuousNode(QWidget *parent, const QPoint &p, unsigned int n)
 ContinuousNode::ContinuousNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/continue.png"}, true}
 {
     type = Type::Continuous;
-    move(40, 120);
+    move(35, 120);
     show();
     setAttribute(Qt::WA_DeleteOnClose);
 }

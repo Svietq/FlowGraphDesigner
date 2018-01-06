@@ -22,7 +22,7 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, const QPoint &p, unsigned 
 ReservingJoinNode::ReservingJoinNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/reserving_join.png"}, true}
 {
     type = Type::ReservingJoin;
-    move(35, 10);
+    move(40, 10);
     show();
     setAttribute(Qt::WA_DeleteOnClose);
 }

@@ -13,7 +13,7 @@ SourceNode::SourceNode(QWidget *parent, const QPoint &p, unsigned int n) : Node{
 SourceNode::SourceNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/source.png"}, true}
 {
     type = Type::Source;
-    move(35, 10);
+    move(50, 10);
     show();
     setAttribute(Qt::WA_DeleteOnClose);
 }
