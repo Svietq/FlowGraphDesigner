@@ -162,11 +162,11 @@ void CodeGenerator::write_continuous_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     continuous_node< int, int > continous_node_" << id << "(graph_g0, 1, ";
+    stream_cpp << "     continue_node< int, int > continue_node_" << id << "(graph_g0, 1, ";
 
     if(node->function == "")
     {
-        stream_cpp << " continous_node_" << id << "_body()";
+        stream_cpp << " continue_node_" << id << "_body()";
     }
     else
     {
@@ -176,10 +176,9 @@ void CodeGenerator::write_continuous_node(Node *node)
 
     //write to .h file:
     QTextStream stream_h( &file_h );
-    stream_h << " \\\\?????????" << '\n';
-    stream_h << " class continuous_" << id << "_body {" << '\n';
+    stream_h << " class continue_node_" << id << "_body {" << '\n';
     stream_h << " public:" << '\n';
-    stream_h << "     bool operator()( const int & /*input*/ ) {" << '\n';
+    stream_h << "     bool operator()( const continue_msg & ) {" << '\n';
     stream_h << "         //" << '\n';
     stream_h << "         // ADD USER BODY HERE" << '\n';
     stream_h << "         // " << '\n';
