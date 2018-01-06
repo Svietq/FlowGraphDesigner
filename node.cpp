@@ -110,7 +110,7 @@ bool Node::connect_to_in(Port * port)
 void Node::mouseDoubleClickEvent(QMouseEvent *)
 {
     const auto &top = static_cast<MainWindow*>(this->window());
-    top->set_node_id(id);
+    top->set_dock_widget_contents(id, function);
     emit node_double_clicked();
 }
 

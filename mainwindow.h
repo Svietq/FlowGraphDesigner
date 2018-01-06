@@ -16,7 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void set_node_id(std::size_t id);
+    void set_dock_widget_contents(std::size_t id, const QString &function);
 
     Ui::MainWindow *ui;
 

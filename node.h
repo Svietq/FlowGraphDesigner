@@ -35,6 +35,8 @@ public:
 
     void set_ports();
 
+    QString function;
+
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
 

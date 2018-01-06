@@ -9,8 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::MenuComputational), "Computational");
     ui->tabWidget->addTab(new DragWidget(nullptr, DragWidget::Type::MenuJoinSplit), "Join/split");
-    ui->dockWidget_2->hide();
-    QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ ui->dockWidget_2->hide(); } );
+    ui->frame->hide();
+    QObject::connect( this->ui->canvas, &DragWidget::close_dock_widget, [=](){ ui->frame->hide(); } );
     QObject::connect( this, &MainWindow::connect_button_toggled, [this](){ this->ui->canvas->is_connecting = true; });
     QObject::connect( this, &MainWindow::connect_button_not_toggled, [this](){ this->ui->canvas->is_connecting = false; });
     QObject::connect( this, &MainWindow::disconnect_button_toggled, [this](){ this->ui->canvas->is_disconnecting = true; });
@@ -24,14 +24,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::set_node_id(std::size_t id)
+void MainWindow::set_dock_widget_contents(std::size_t id, const QString & function)
 {
-    static_cast<QLabel*>(ui->dockWidgetContents_2->children()[0])->setText(QString::number(id));
+    auto id_label = static_cast<QLabel*>(ui->frame->children()[1]);
+
+    id_label->setText( "  Node id:   " + QString::number(id));
 }
 
 void MainWindow::show_window()
 {
-    ui->dockWidget_2->show();
+    ui->frame->show();
 }
 
 void MainWindow::on_toolButton_4_toggled(bool checked)
