@@ -33,6 +33,7 @@ private slots:
     void on_toolButton_4_toggled(bool checked);
     void on_toolButton_3_toggled(bool checked);
     void on_toolButton_2_clicked();
+    void set_function();
 
 private:
     FileManager pop_up{this};
