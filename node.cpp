@@ -77,7 +77,7 @@ bool Node::connect_port(Port *port)
 {
     if(!port) return false;
     if(!connect_from_out(port)){ return false; }
-    if(!port->node->connect_to_in(this->last_port_out)){ return false; }
+    if(!port->node->connect_to_in(this->current_port_out)){ return false; }
     return true;
 }
 

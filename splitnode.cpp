@@ -39,7 +39,10 @@ void SplitNode::set_point_out()
 
 bool SplitNode::connect_port(Port *port)
 {
-    return Node::connect_port(port);
+    if(!port) return false;
+    if(!connect_from_out(port)){ return false; }
+    if(!port->node->connect_to_in(this->last_port_out)){ return false; }
+    return true;
 }
 
 bool SplitNode::connect_from_out(Port *port)

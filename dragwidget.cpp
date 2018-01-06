@@ -109,7 +109,6 @@ DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype
 
 void DragWidget::generate_code(const QString & name, const QString &dir)
 {
-    qDebug() << "DragWidget::generate_code";
     CodeGenerator gen{name, dir, node_list, edges};
     gen.generate();
 }
