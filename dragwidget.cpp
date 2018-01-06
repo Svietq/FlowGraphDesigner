@@ -107,7 +107,7 @@ DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype
     }
 }
 
-void DragWidget::generate_code()
+void DragWidget::generate_code(const QString &dir)
 {
     qDebug() << "DragWidget::generate_code";
     CodeGenerator gen{"test", "/home/michal/Dokumenty/inzynierka/test/", node_list, edges};
@@ -229,7 +229,6 @@ void DragWidget::dropEvent(QDropEvent *event)
 
 void DragWidget::mouseDoubleClickEvent(QMouseEvent * )
 {
-    generate_code();
     emit close_dock_widget();
 }
 

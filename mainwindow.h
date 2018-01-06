@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDialog>
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +32,11 @@ signals:
 private slots:
     void on_toolButton_4_toggled(bool checked);
     void on_toolButton_3_toggled(bool checked);
+    void on_toolButton_2_clicked();
+
+private:
+    QDialog pop_up{this};
+    void set_pop_up();
 };
 
 #endif // MAINWINDOW_H
