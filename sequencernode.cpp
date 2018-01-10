@@ -26,14 +26,12 @@ bool SequencerNode::connect_port(Port * port)
 
 bool SequencerNode::connect_from_out(Port * port)
 {
-//    return Node::connect_from_out(port);
     if(current_port_out->connected_ports.isEmpty())
     {
         return Node::connect_from_out(port);
     }
     else
     {
-//        port->connected_ports.pop_back();
         return false;
     }
 }

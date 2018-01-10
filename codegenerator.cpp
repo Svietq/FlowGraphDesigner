@@ -113,6 +113,9 @@ void CodeGenerator::write_node(Node * node)
     case Node::Type::Split:
         write_split_node(node);
         break;
+    case Node::Type::Sequencer:
+        write_sequencer_node(node);
+        break;
     default:
         throw std::invalid_argument("node does not exist");
         break;
@@ -235,6 +238,39 @@ void CodeGenerator::write_split_node(Node *node)
     stream_cpp << "     split_node< flow::tuple< int, int > > split_node_" << id << "(graph_g0); " << '\n';
 }
 
+void CodeGenerator::write_sequencer_node(Node *node)
+{
+    QString id = QString::number(node->id);
+
+    //write to .cpp file:
+    QTextStream stream_cpp( &file_cpp );
+    stream_cpp << "     sequencer_node< int > sequencer_node_" << id << "(graph_g0, ";
+
+    if(node->function == "")
+    {
+        stream_cpp << "sequencer_node_" << id << "_body()";
+    }
+    else
+    {
+        stream_cpp << node->function;
+    }
+    stream_cpp << " ); " << '\n';
+
+    //write to .h file:
+    QTextStream stream_h( &file_h );
+    stream_h << " class sequencer_node_" << id << "_body {" << '\n';
+    stream_h << "     atomic< size_t > next_val;" << '\n';
+    stream_h << " public:" << '\n';
+    stream_h << "     sequencer_node_" << id << "_body() { next_val = 0; } " << '\n';
+    stream_h << "     size_t operator()( const int & /*input*/ ) {" << '\n';
+    stream_h << "         //" << '\n';
+    stream_h << "         // ADD USER BODY HERE" << '\n';
+    stream_h << "         // " << '\n';
+    stream_h << "         return next_val.fetch_and_increment();" << '\n';
+    stream_h << "     }" << '\n';
+    stream_h << " }" << '\n' << '\n';
+}
+
 void CodeGenerator::write_port(Port *port, QTextStream &stream_cpp)
 {
     switch (port->node->type) {
@@ -252,6 +288,9 @@ void CodeGenerator::write_port(Port *port, QTextStream &stream_cpp)
         break;
     case Node::Type::Split:
         write_split_port(port, stream_cpp);
+        break;
+    case Node::Type::Sequencer:
+        write_sequencer_port(port, stream_cpp);
         break;
     default:
         throw std::invalid_argument("node does not exist");
@@ -294,6 +333,13 @@ void CodeGenerator::write_split_port(Port *port, QTextStream &stream_cpp)
     QString port_id = QString::number(port->id);
     //write to .cpp file:
     stream_cpp << "output_port< " << port_id << " >( split_node_" << node_id << " )";
+}
+
+void CodeGenerator::write_sequencer_port(Port *port, QTextStream &stream_cpp)
+{
+    QString id = QString::number(port->node->id);
+    //write to .cpp file:
+    stream_cpp << "sequencer_node_" << id;
 }
 
 
