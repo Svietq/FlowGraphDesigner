@@ -36,7 +36,8 @@ SOURCES += \
     port.cpp \
     splitnode.cpp \
     codegenerator.cpp \
-    filemanager.cpp
+    filemanager.cpp \
+    sequencernode.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,7 +50,8 @@ HEADERS += \
     port.h \
     splitnode.h \
     codegenerator.h \
-    filemanager.h
+    filemanager.h \
+    sequencernode.h
 
 FORMS += \
         mainwindow.ui

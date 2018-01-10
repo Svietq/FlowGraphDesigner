@@ -6,6 +6,7 @@
 #include "functionnode.h"
 #include "reservingjoinnode.h"
 #include "splitnode.h"
+#include "sequencernode.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
 
@@ -34,6 +35,8 @@ Node *Node::create(Node::Type type, QWidget *parent, const QPoint &p, unsigned i
         return new ReservingJoinNode{parent, p, n};
     case Type::Split:
         return new SplitNode{parent, p, n};
+    case Type::Sequencer:
+        return new SequencerNode{parent, p, n};
     }
     throw std::invalid_argument("The node does not exist");
 }
@@ -51,6 +54,8 @@ Node *Node::create(Node::Type type, QWidget *parent, bool)
         return new ReservingJoinNode{parent, true};
     case Type::Split:
         return new SplitNode{parent, true};
+    case Type::Sequencer:
+        return new SequencerNode{parent, true};
     }
     throw std::invalid_argument("The node does not exist");
 }

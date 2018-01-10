@@ -22,7 +22,7 @@ namespace
         }
         else if(type == DragWidget::Type::MenuBuffer)
         {
-
+            Node::create(Node::Type::Sequencer, parent, true);
         }
 
     }
