@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Flow Graph Designer</string>
+   <string>TBB code generator</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -64,7 +64,7 @@
         </size>
        </property>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="DragWidget" name="canvas">
@@ -74,7 +74,6 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <zorder></zorder>
          </widget>
         </item>
         <item>
