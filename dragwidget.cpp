@@ -14,13 +14,17 @@ namespace
             Node::create(Node::Type::Source, parent, true);
             Node::create(Node::Type::Continuous, parent, true);
             Node::create(Node::Type::Function, parent, true);
-
         }
         else if(type == DragWidget::Type::MenuJoinSplit)
         {
             Node::create(Node::Type::ReservingJoin, parent, true);
             Node::create(Node::Type::Split, parent, true);
         }
+        else if(type == DragWidget::Type::MenuBuffer)
+        {
+
+        }
+
     }
 
     QDataStream & operator<<( QDataStream & data, const Node & node)
@@ -102,7 +106,7 @@ DragWidget::DragWidget(QWidget *parent, Type itype) : QFrame(parent), type{itype
 {
     setAcceptDrops(true);
 
-    if(itype == Type::MenuComputational || itype == Type::MenuJoinSplit)
+    if(itype == Type::MenuComputational || itype == Type::MenuJoinSplit || itype == Type::MenuBuffer)
     {
         set_node_icons(this, itype);
     }
@@ -119,7 +123,8 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
     if(event->mimeData()->hasFormat(mime_format))
     {
         if(static_cast<DragWidget*>(event->source())->type == Type::MenuComputational ||
-           static_cast<DragWidget*>(event->source())->type == Type::MenuJoinSplit  )
+           static_cast<DragWidget*>(event->source())->type == Type::MenuJoinSplit  ||
+           static_cast<DragWidget*>(event->source())->type == Type::MenuBuffer )
         {
             if( event->source() != this ) //Menu -> Canvas
             {
@@ -200,7 +205,7 @@ void DragWidget::dropEvent(QDropEvent *event)
 
         auto source = static_cast<DragWidget*>(event->source());
 
-        if(source->type == Type::MenuComputational || source->type == Type::MenuJoinSplit)
+        if(source->type == Type::MenuComputational || source->type == Type::MenuJoinSplit || source->type == Type::MenuBuffer)
         {
             if( source != this )          //Menu -> Canvas
             {
