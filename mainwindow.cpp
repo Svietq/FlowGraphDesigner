@@ -30,9 +30,9 @@ MainWindow::~MainWindow()
 void MainWindow::set_dock_widget_contents(std::size_t id, const QString & function)
 {
     auto id_label = static_cast<QLabel*>(ui->frame->children()[1]);
-    id_label->setText( "  Node id:   " + QString::number(id));
+    id_label->setText( "     Node id:   " + QString::number(id));
 
-    auto function_line = static_cast<QLineEdit*>(ui->frame->children()[3]);
+    auto function_line = static_cast<QLineEdit*>(ui->frame->children()[4]);
     function_line->setText(function);
 }
 
@@ -74,7 +74,7 @@ void MainWindow::on_toolButton_2_clicked()
 
 void MainWindow::set_function()
 {
-    auto function_line = static_cast<QLineEdit*>(ui->frame->children()[3]);
+    auto function_line = static_cast<QLineEdit*>(ui->frame->children()[4]);
     ui->canvas->current_node->function = function_line->text();
 }
 
