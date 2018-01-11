@@ -138,6 +138,28 @@
          <enum>QLayout::SetMinimumSize</enum>
         </property>
         <item>
+         <widget class="QToolButton" name="toolButton_5">
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Save</string>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="popupMode">
+           <enum>QToolButton::DelayedPopup</enum>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonIconOnly</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="toolButton">
           <property name="text">
            <string>Analyze</string>
