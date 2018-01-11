@@ -110,6 +110,9 @@ void CodeGenerator::write_node(Node * node)
     case Node::Type::ReservingJoin:
         write_reserving_join_node(node);
         break;
+    case Node::Type::QueueingJoin:
+        write_queueing_join_node(node);
+        break;
     case Node::Type::Split:
         write_split_node(node);
         break;
@@ -230,6 +233,14 @@ void CodeGenerator::write_reserving_join_node(Node *node)
     stream_cpp << "     join_node< flow::tuple< int, int >, reserving > join_node_" << id << "(graph_g0); " << '\n';
 }
 
+void CodeGenerator::write_queueing_join_node(Node *node)
+{
+    QString id = QString::number(node->id);
+    //write to .cpp file:
+    QTextStream stream_cpp( &file_cpp );
+    stream_cpp << "     join_node< flow::tuple< int, int >, queueing > join_node_" << id << "(graph_g0); " << '\n';
+}
+
 void CodeGenerator::write_split_node(Node *node)
 {
     QString id = QString::number(node->id);
@@ -286,6 +297,9 @@ void CodeGenerator::write_port(Port *port, QTextStream &stream_cpp)
     case Node::Type::ReservingJoin:
         write_reserving_join_port(port, stream_cpp);
         break;
+    case Node::Type::QueueingJoin:
+        write_queueing_join_port(port, stream_cpp);
+        break;
     case Node::Type::Split:
         write_split_port(port, stream_cpp);
         break;
@@ -320,6 +334,14 @@ void CodeGenerator::write_function_port(Port *port, QTextStream &stream_cpp)
 }
 
 void CodeGenerator::write_reserving_join_port(Port *port, QTextStream & stream_cpp)
+{
+    QString node_id = QString::number(port->node->id);
+    QString port_id = QString::number(port->id);
+    //write to .cpp file:
+    stream_cpp << "input_port< " << port_id << " >( join_node_" << node_id << " )";
+}
+
+void CodeGenerator::write_queueing_join_port(Port *port, QTextStream &stream_cpp)
 {
     QString node_id = QString::number(port->node->id);
     QString port_id = QString::number(port->id);

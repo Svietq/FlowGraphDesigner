@@ -32,6 +32,7 @@ private:
     void write_continuous_node(Node *node);
     void write_function_node(Node *node);
     void write_reserving_join_node(Node *node);
+    void write_queueing_join_node(Node *node);
     void write_split_node(Node *node);
     void write_sequencer_node(Node *node);
 
@@ -40,6 +41,7 @@ private:
     void write_continuous_port(Port * port, QTextStream & stream_cpp);
     void write_function_port(Port * port, QTextStream & stream_cpp);
     void write_reserving_join_port(Port * port, QTextStream & stream_cpp);
+    void write_queueing_join_port(Port * port, QTextStream & stream_cpp);
     void write_split_port(Port * port, QTextStream & stream_cpp);
     void write_sequencer_port(Port * port, QTextStream & stream_cpp);
 
