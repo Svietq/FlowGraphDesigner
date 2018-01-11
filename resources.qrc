@@ -6,5 +6,7 @@
         <file>icons/source.png</file>
         <file>icons/split.png</file>
         <file>icons/sequencer_node.png</file>
+        <file>icons/queue_join.png</file>
+        <file>icons/queue_node.png</file>
     </qresource>
 </RCC>

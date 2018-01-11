@@ -19,6 +19,7 @@ namespace
         {
             Node::create(Node::Type::ReservingJoin, parent, true);
             Node::create(Node::Type::Split, parent, true);
+            Node::create(Node::Type::QueueingJoin, parent, true);
         }
         else if(type == DragWidget::Type::MenuBuffer)
         {
@@ -45,7 +46,7 @@ namespace
 
     std::pair<Port*, Port*> find_connection(DragWidget * widget, Node * node)
     {
-        if(widget->current_node->type == Node::Type::Split && node->type == Node::Type::ReservingJoin)
+        if(widget->current_node->type == Node::Type::Split && (node->type == Node::Type::ReservingJoin || node->type == Node::Type::QueueingJoin))
         {
             return std::pair<Port*,Port*>{widget->current_node->last_port_out, node->last_port_in};
         }
@@ -53,7 +54,7 @@ namespace
         {
             return std::pair<Port*,Port*>{widget->current_node->last_port_out, node->current_port_in};
         }
-        else if(node->type == Node::Type::ReservingJoin)
+        else if(node->type == Node::Type::ReservingJoin || node->type == Node::Type::QueueingJoin)
         {
             return std::pair<Port*,Port*>{widget->current_node->current_port_out, node->last_port_in};
         }
@@ -74,7 +75,7 @@ namespace
             {
                 widget->current_node->set_ports();
             }
-            if( node->type == Node::Type::ReservingJoin)
+            if( node->type == Node::Type::ReservingJoin || node->type == Node::Type::QueueingJoin )
             {
                 node->set_ports();
             }

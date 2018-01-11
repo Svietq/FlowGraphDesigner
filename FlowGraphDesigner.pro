@@ -37,7 +37,8 @@ SOURCES += \
     splitnode.cpp \
     codegenerator.cpp \
     filemanager.cpp \
-    sequencernode.cpp
+    sequencernode.cpp \
+    queueingjoinnode.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -51,7 +52,8 @@ HEADERS += \
     splitnode.h \
     codegenerator.h \
     filemanager.h \
-    sequencernode.h
+    sequencernode.h \
+    queueingjoinnode.h
 
 FORMS += \
         mainwindow.ui
