@@ -36,6 +36,8 @@ public:
     void set_ports();
 
     QString function;
+    QString input_type = "int";
+    QString output_type = "int";
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;

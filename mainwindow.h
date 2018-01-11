@@ -16,7 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void set_dock_widget_contents(std::size_t id, const QString &function);
+    void set_dock_widget_contents(std::size_t id, const QString &function, const QString &input_type, const QString &output_type);
 
     Ui::MainWindow *ui;
 
@@ -34,6 +34,7 @@ private slots:
     void on_toolButton_3_toggled(bool checked);
     void on_toolButton_2_clicked();
     void set_function();
+    void set_types();
 
 private:
     FileManager pop_up{this};

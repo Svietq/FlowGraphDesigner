@@ -131,7 +131,7 @@ void CodeGenerator::write_source_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     source_node< int > source_node_" << id << "(graph_g0, " ;
+    stream_cpp << "     source_node< " << node->output_type << " > source_node_" << id << "(graph_g0, " ;
 
     if(node->function == "" )
     {
@@ -147,7 +147,7 @@ void CodeGenerator::write_source_node(Node *node)
     QTextStream stream_h( &file_h );
     stream_h << " class source_node_" << id << "_body {" << '\n';
     stream_h << " public:" << '\n';
-    stream_h << "     bool operator()( int &output ) {" << '\n';
+    stream_h << "     bool operator()( " << node->output_type << " &output ) {" << '\n';
     stream_h << "         //" << '\n';
     stream_h << "         // ADD USER BODY HERE" << '\n';
     stream_h << "         // " << '\n';
@@ -168,7 +168,8 @@ void CodeGenerator::write_continuous_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     continue_node< int, int > continue_node_" << id << "(graph_g0, 1, ";
+    stream_cpp << "     continue_node< " << node->input_type << " , " << node->output_type
+               << " > continue_node_" << id << "(graph_g0, 1, ";
 
     if(node->function == "")
     {
@@ -199,7 +200,8 @@ void CodeGenerator::write_function_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     function_node< int, int > function_node_" << id << "(graph_g0, 1, ";
+    stream_cpp << "     function_node< " << node->input_type << " , " << node->output_type
+               << " > function_node_" << id << "(graph_g0, 1, ";
 
     if(node->function == "")
     {
@@ -215,7 +217,7 @@ void CodeGenerator::write_function_node(Node *node)
     QTextStream stream_h( &file_h );
     stream_h << " class function_node_" << id << "_body {" << '\n';
     stream_h << " public:" << '\n';
-    stream_h << "     bool operator()( const int & /*input*/ ) {" << '\n';
+    stream_h << "     bool operator()( const " << node->input_type << " & /*input*/ ) {" << '\n';
     stream_h << "         //" << '\n';
     stream_h << "         // ADD USER BODY HERE" << '\n';
     stream_h << "         // " << '\n';
@@ -230,7 +232,7 @@ void CodeGenerator::write_reserving_join_node(Node *node)
     QString id = QString::number(node->id);
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     join_node< flow::tuple< int, int >, reserving > join_node_" << id << "(graph_g0); " << '\n';
+    stream_cpp << "     join_node< " << node->output_type << ", reserving > join_node_" << id << "(graph_g0); " << '\n';
 }
 
 void CodeGenerator::write_queueing_join_node(Node *node)
@@ -238,7 +240,7 @@ void CodeGenerator::write_queueing_join_node(Node *node)
     QString id = QString::number(node->id);
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     join_node< flow::tuple< int, int >, queueing > join_node_" << id << "(graph_g0); " << '\n';
+    stream_cpp << "     join_node< " << node->output_type << ", queueing > join_node_" << id << "(graph_g0); " << '\n';
 }
 
 void CodeGenerator::write_split_node(Node *node)
@@ -246,7 +248,7 @@ void CodeGenerator::write_split_node(Node *node)
     QString id = QString::number(node->id);
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     split_node< flow::tuple< int, int > > split_node_" << id << "(graph_g0); " << '\n';
+    stream_cpp << "     split_node< " << node->input_type << " > split_node_" << id << "(graph_g0); " << '\n';
 }
 
 void CodeGenerator::write_sequencer_node(Node *node)
@@ -255,7 +257,7 @@ void CodeGenerator::write_sequencer_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     sequencer_node< int > sequencer_node_" << id << "(graph_g0, ";
+    stream_cpp << "     sequencer_node< " << node->input_type << " > sequencer_node_" << id << "(graph_g0, ";
 
     if(node->function == "")
     {
@@ -273,7 +275,7 @@ void CodeGenerator::write_sequencer_node(Node *node)
     stream_h << "     atomic< size_t > next_val;" << '\n';
     stream_h << " public:" << '\n';
     stream_h << "     sequencer_node_" << id << "_body() { next_val = 0; } " << '\n';
-    stream_h << "     size_t operator()( const int & /*input*/ ) {" << '\n';
+    stream_h << "     size_t operator()( const " << node->input_type << " & /*input*/ ) {" << '\n';
     stream_h << "         //" << '\n';
     stream_h << "         // ADD USER BODY HERE" << '\n';
     stream_h << "         // " << '\n';
@@ -323,7 +325,7 @@ void CodeGenerator::write_continuous_port(Port *port, QTextStream &stream_cpp)
 {
     QString id = QString::number(port->node->id);
     //write to .cpp file:
-    stream_cpp << "continuous_node_" << id;
+    stream_cpp << "continue_node_" << id;
 }
 
 void CodeGenerator::write_function_port(Port *port, QTextStream &stream_cpp)

@@ -17,6 +17,7 @@ ReservingJoinNode::ReservingJoinNode(QWidget *parent, const QPoint &p, unsigned 
     set_point_out();
     show();
     setAttribute(Qt::WA_DeleteOnClose);
+    output_type = "flow::tuple< int, int >";
 }
 
 ReservingJoinNode::ReservingJoinNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/reserving_join.png"}, true}

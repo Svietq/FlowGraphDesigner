@@ -13,6 +13,7 @@ QueueingJoinNode::QueueingJoinNode(QWidget *parent, const QPoint &p, unsigned in
     set_point_out();
     show();
     setAttribute(Qt::WA_DeleteOnClose);
+    output_type = "flow::tuple< int, int >";
 }
 
 QueueingJoinNode::QueueingJoinNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/queue_join.png"}, true}

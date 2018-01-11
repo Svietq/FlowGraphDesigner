@@ -17,6 +17,7 @@ SplitNode::SplitNode(QWidget *parent, const QPoint &p, unsigned int n) : Node{pa
     set_point_out();
     show();
     setAttribute(Qt::WA_DeleteOnClose);
+    input_type = "flow::tuple< int, int >";
 }
 
 SplitNode::SplitNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/split.png"}, true}
