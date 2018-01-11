@@ -36,13 +36,13 @@ private:
     void write_split_node(Node *node);
     void write_sequencer_node(Node *node);
 
-    void write_port(Port * port, QTextStream & stream_cpp);
+    void write_port(Port * port, QTextStream & stream_cpp, bool is_second = false);
     void write_source_port(Port * port, QTextStream & stream_cpp);
     void write_continuous_port(Port * port, QTextStream & stream_cpp);
     void write_function_port(Port * port, QTextStream & stream_cpp);
-    void write_reserving_join_port(Port * port, QTextStream & stream_cpp);
-    void write_queueing_join_port(Port * port, QTextStream & stream_cpp);
-    void write_split_port(Port * port, QTextStream & stream_cpp);
+    void write_reserving_join_port(Port * port, QTextStream & stream_cpp, bool is_second = false);
+    void write_queueing_join_port(Port * port, QTextStream & stream_cpp, bool is_second = false);
+    void write_split_port(Port * port, QTextStream & stream_cpp, bool is_second = false);
     void write_sequencer_port(Port * port, QTextStream & stream_cpp);
 
 };
