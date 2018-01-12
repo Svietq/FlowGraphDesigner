@@ -8,6 +8,8 @@ ContinuousNode::ContinuousNode(QWidget *parent, const QPoint &p, unsigned int n)
     set_point_out();
     show();
     setAttribute(Qt::WA_DeleteOnClose);
+    input_type = "continue_msg";
+    output_type = "continue_msg";
 }
 
 ContinuousNode::ContinuousNode(QWidget *parent, bool) :  Node{parent, QPixmap{":/icons/continue.png"}, true}

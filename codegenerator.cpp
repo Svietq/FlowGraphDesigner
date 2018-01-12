@@ -168,8 +168,8 @@ void CodeGenerator::write_continuous_node(Node *node)
 
     //write to .cpp file:
     QTextStream stream_cpp( &file_cpp );
-    stream_cpp << "     continue_node< " << node->input_type << " , " << node->output_type
-               << " > continue_node_" << id << "(graph_g0, 1, ";
+    stream_cpp << "     continue_node< " << node->output_type
+               << " > continue_node_" << id << "(graph_g0, ";
 
     if(node->function == "")
     {
